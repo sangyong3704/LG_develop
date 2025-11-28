@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leadership Management Prototype</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* 1. 컬러 팔레트 정의 (제공된 이미지 기준) */
+        :root {
+            --color-magenta: #D7177B;
+            --color-purple: #551D83;
+            --color-lightblue: #70C0E6;
+            --color-deeliblue: #008785;
+            --color-lightgray: #C4C4C4;
+            --color-bg-gray: #F5F5F5; /* 배경용 연한 회색 */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: var(--color-bg-gray);
+            color: #333;
+        }
+
+        /* 2. 상단 헤더 영역 (Layout) */
+        header {
+            background-color: var(--color-purple); /* 레퍼런스 이미지의 어두운 느낌을 팔레트의 보라색으로 구현 */
+            color: white;
+            padding: 0 40px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        /* 2-1. 최상단 (로고 및 검색창) */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+            padding-top: 10px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            font-size: 24px;
+        }
+
+        /* LG화학 로고 플레이스홀더 (이미지 URL이 없을 경우를 대비해 텍스트+스타일로 구현하되, 실제 이미지가 있다면 img 태그로 대체 가능) */
+        .lg-logo {
+            /* 실제 로고 이미지가 있다면 아래 img 태그 사용 */
+            /* <img src="URL" alt="LG Chem"> */
+            color: white; 
+            font-style: italic; /* LG 로고 특유의 느낌 흉내 */
+            letter-spacing: -0.5px;
+        }
+        .lg-logo span {
+            color: var(--color-lightblue); /* 포인트 컬러 살짝 가미 */
+        }
+
+        /* 검색창 (레퍼런스 이미지의 캡슐 형태) */
+        .search-container {
+            position: relative;
+        }
+
+        .search-box {
+            background-color: rgba(255, 255, 255, 0.15); /* 반투명 배경 */
+            border: 1px solid var(--color-lightgray);
+            border-radius: 50px; /* 둥근 캡슐 모양 */
+            padding: 10px 20px;
+            padding-right: 40px;
+            color: white;
+            outline: none;
+            width: 300px;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .search-box::placeholder {
+            color: #ddd;
+        }
+
+        .search-box:focus {
+            background-color: white;
+            color: var(--color-purple);
+            border-color: var(--color-magenta);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            pointer-events: none; /* 클릭 방지 */
+        }
+        
+        .search-box:focus + .search-icon {
+            color: var(--color-purple);
+        }
+
+        /* 3. 메인 탭 (Navigation) */
+        .nav-tabs {
+            display: flex;
+            gap: 40px;
+            margin-top: 10px;
+        }
+
+        .tab-item {
+            padding: 15px 10px;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.7);
+            position: relative;
+            transition: color 0.3s;
+            text-decoration: none;
+        }
+
+        .tab-item:hover {
+            color: white;
+        }
+
+        /* 활성화된 탭 스타일 */
+        .tab-item.active {
+            color: white;
+            font-weight: 700;
+        }
+
+        /* 활성화 탭 하단 바 (Deeli Blue 사용) */
+        .tab-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background-color: var(--color-deeliblue); /* 탭 강조색 */
+            border-radius: 5px 5px 0 0;
+        }
+
+        /* 4. 컨텐츠 영역 (예시) */
+        main {
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-top: 4px solid var(--color-magenta); /* 마젠타 포인트 */
+            text-align: center;
+            color: #666;
+        }
+
+        .card h2 {
+            color: var(--color-purple);
+            margin-bottom: 10px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="top-bar">
+            <div class="logo-area">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/LG_Chem_logo.svg/2560px-LG_Chem_logo.svg.png" alt="LG Chem" height="30" style="filter: brightness(0) invert(1);"> 
+                </div>
+            
+            <div class="search-container">
+                <input type="text" class="search-box" placeholder="#팀원 이름, 부서 검색">
+                <span class="search-icon">🔍</span>
+            </div>
+        </div>
+
+        <nav class="nav-tabs">
+            <a href="#" class="tab-item active">기본정보</a>
+            <a href="#" class="tab-item">육성</a>
+            <a href="#" class="tab-item">피드백 전달</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="card">
+            <h2>기본정보 대시보드</h2>
+            <p>좌측 상단 로고, 우측 상단 검색창, 그리고 상단 탭 구성이 적용된 프로토타입입니다.</p>
+            <br>
+            <div style="display:flex; justify-content:center; gap:10px;">
+                <div style="background:var(--color-magenta); width:50px; height:50px; border-radius:50%;"></div>
+                <div style="background:var(--color-purple); width:50px; height:50px; border-radius:50%;"></div>
+                <div style="background:var(--color-lightblue); width:50px; height:50px; border-radius:50%;"></div>
+                <div style="background:var(--color-deeliblue); width:50px; height:50px; border-radius:50%;"></div>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>
