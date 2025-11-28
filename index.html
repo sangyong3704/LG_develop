@@ -213,7 +213,7 @@
             <div class="member-grid">
                 
                 <!-- 1. 박태희 -->
-                <div class="member-card" onclick="showDetailView('박태희', 'Data Scientist', '#데이터분석 #통계 #논리적')">
+                <div class="member-card" onclick="showDetailView('박태희 선임', 'Data Scientist', '#데이터분석 #통계 #논리적')">
                     <div class="status-bar status-good"></div>
                     <div class="m-header">
                         <div class="m-avatar">👩🏻‍💻</div>
@@ -231,7 +231,7 @@
                 </div>
 
                 <!-- 2. 박재현 -->
-                <div class="member-card" onclick="showDetailView('박재현', 'AI Researcher', '#AI #딥러닝 #혁신')">
+                <div class="member-card" onclick="showDetailView('박재현 책임', 'AI Researcher', '#AI #딥러닝 #혁신')">
                     <div class="status-bar status-good"></div>
                     <div class="m-header">
                         <div class="m-avatar">👨🏻‍🔬</div>
@@ -249,7 +249,7 @@
                 </div>
 
                 <!-- 3. 박정호 -->
-                <div class="member-card" onclick="showDetailView('박정호', 'Project Manager', '#PM #커뮤니케이션 #리더십')">
+                <div class="member-card" onclick="showDetailView('박정호 책임', 'Project Manager', '#PM #커뮤니케이션 #리더십')">
                     <div class="status-bar status-check"></div>
                     <div class="m-header">
                         <div class="m-avatar">👨🏻‍💼</div>
@@ -267,7 +267,7 @@
                 </div>
 
                  <!-- 4. 박재원 -->
-                 <div class="member-card" onclick="showDetailView('박재원', 'Software Engineer', '#개발 #클라우드 #문제해결')">
+                 <div class="member-card" onclick="showDetailView('박재원 선임', 'Software Engineer', '#개발 #클라우드 #문제해결')">
                     <div class="status-bar status-good"></div>
                     <div class="m-header">
                         <div class="m-avatar">👨🏻‍💻</div>
@@ -285,7 +285,7 @@
                 </div>
 
                 <!-- 5. 하유림 -->
-                <div class="member-card" onclick="showDetailView('하유림', 'UX Designer', '#디자인 #사용자중심 #창의적')">
+                <div class="member-card" onclick="showDetailView('하유림 선임', 'UX Designer', '#디자인 #사용자중심 #창의적')">
                     <div class="status-bar status-good"></div>
                     <div class="m-header">
                         <div class="m-avatar">👩🏻‍🎨</div>
@@ -400,8 +400,8 @@
             document.getElementById('view-list').classList.add('hidden');
             document.getElementById('view-detail').classList.remove('hidden');
             
-            // 2. 정보 업데이트
-            document.getElementById('detail-name').textContent = name + (name.includes('책임') ? '' : ' 선임'); // 임시 직급 처리
+            // 2. 정보 업데이트 (전달받은 전체 이름을 그대로 사용)
+            document.getElementById('detail-name').textContent = name;
             document.getElementById('detail-job').textContent = "DX 추진팀 / " + job;
             
             // 키워드 업데이트
