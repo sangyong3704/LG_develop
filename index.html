@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 
     <style>
-        /* 1. 디자인 시스템 변수 */
+        /* [디자인 시스템] */
         :root {
             --color-magenta: #D7177B;
             --color-purple: #551D83;
@@ -26,409 +26,678 @@
             font-family: 'Noto Sans KR', sans-serif;
             background-color: var(--color-bg-gray);
             color: #333;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+            display: flex; flex-direction: column; min-height: 100vh;
         }
 
-        /* 2. 공통 헤더 */
+        /* 1. 헤더 (고정) */
         header {
             background: var(--header-gradient);
             color: #fff;
             padding: 0 40px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            height: 64px;
+            display: flex; align-items: center; justify-content: space-between;
+            flex-shrink: 0;
+            position: relative; z-index: 100;
         }
-
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 72px;
-            padding-top: 8px;
-        }
-
-        .site-title {
-            font-size: 24px; font-weight: 700; color: #fff; text-decoration: none; letter-spacing: -0.5px; cursor: pointer;
-            display: flex; align-items: center; gap: 8px;
-        }
-
-        .search-container { position: relative; width: 300px; }
+        .site-title { font-size: 20px; font-weight: 700; cursor: pointer; }
         .search-box {
-            width: 100%; padding: 10px 40px 10px 20px;
-            border: 1px solid rgba(255,255,255,0.4); border-radius: 50px;
-            background: rgba(255,255,255,0.15); color: #fff;
-            font-size: 14px; outline: none;
+            background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4);
+            border-radius: 20px; padding: 6px 16px; color: #fff; outline: none; width: 250px;
         }
         .search-box::placeholder { color: rgba(255,255,255,0.7); }
-        .search-icon { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: rgba(255,255,255,0.8); }
 
-        .nav-tabs { display: flex; justify-content: center; gap: 60px; list-style: none; margin-top: 4px; }
+        /* 2. 팀원 선택 바 (Sticky) */
+        .member-bar {
+            background: #fff;
+            border-bottom: 1px solid #ddd;
+            padding: 12px 40px;
+            display: flex; align-items: center; gap: 16px;
+            overflow-x: auto;
+            position: sticky; top: 0; z-index: 90;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .member-label { font-size: 14px; font-weight: 700; color: var(--color-purple); margin-right: 10px; white-space: nowrap; }
+        
+        .member-chip {
+            display: flex; align-items: center; gap: 8px;
+            padding: 6px 12px; border-radius: 24px; border: 1px solid #eee;
+            background: #f9f9f9; cursor: pointer; transition: all 0.2s; min-width: 140px;
+        }
+        .member-chip:hover { background: #f0f0f0; }
+        .member-chip.active {
+            background: rgba(0, 135, 133, 0.1); /* Teal tint */
+            border-color: var(--color-teal);
+        }
+        .chip-avatar { width: 28px; height: 28px; border-radius: 50%; background: #ddd; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+        .chip-info { display: flex; flex-direction: column; line-height: 1.1; }
+        .chip-name { font-size: 13px; font-weight: 700; color: #333; }
+        .chip-job { font-size: 11px; color: #888; }
+        .member-chip.active .chip-name { color: var(--color-teal); }
+
+        /* 3. 탭 네비게이션 */
+        .nav-tabs-container {
+            background: #fff; padding: 0 40px; border-bottom: 1px solid #eee; margin-bottom: 24px;
+        }
+        .nav-tabs { display: flex; justify-content: center; gap: 60px; list-style: none; }
         .tab-link {
-            display: block; padding: 10px 10px 18px; color: rgba(255,255,255,0.6);
-            text-decoration: none; font-size: 18px; font-weight: 500; cursor: pointer;
+            display: block; padding: 16px 10px; color: #888;
+            text-decoration: none; font-size: 16px; font-weight: 500; cursor: pointer;
         }
-        .tab-item.active .tab-link { color: #fff; font-weight: 700; border-bottom: 4px solid var(--color-teal); }
+        .tab-item.active .tab-link { color: var(--color-purple); font-weight: 700; border-bottom: 3px solid var(--color-purple); }
 
-        /* 3. 메인 레이아웃 */
+        /* 4. 메인 컨텐츠 영역 */
         main {
-            flex: 1; padding: 40px; max-width: 1400px; margin: 0 auto; width: 100%;
+            flex: 1; padding: 0 40px 60px; max-width: 1200px; margin: 0 auto; width: 100%;
         }
 
-        /* 화면 전환 유틸리티 */
-        .hidden { display: none !important; }
-        .fade-in { animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* --- [VIEW 1] 팀원 목록 스타일 --- */
-        .team-header {
-            display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;
+        /* 섹션 타이틀 공통 */
+        .section-header {
+            display: flex; align-items: center; gap: 10px; margin: 32px 0 16px;
         }
-        .page-title { font-size: 22px; font-weight: 700; color: #333; display: flex; align-items: center; gap: 8px; }
-        .member-count { background: var(--color-purple); color: #fff; padding: 2px 10px; border-radius: 12px; font-size: 14px; }
+        .section-title { font-size: 20px; font-weight: 700; color: #333; }
+        .section-tag { background: #333; color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 12px; }
 
-        .member-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px;
+        /* [카드 그리드 시스템] */
+        .grid-dashboard { 
+            display: grid; 
+            grid-template-columns: 320px 1fr 1fr; 
+            gap: 24px; 
+            margin-bottom: 24px; 
         }
-
-        .member-card {
-            background: #fff; border-radius: 16px; padding: 24px;
-            border: 1px solid #eee; box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-            transition: transform 0.2s, box-shadow 0.2s; cursor: pointer;
-            position: relative; overflow: hidden;
-        }
-        .member-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); border-color: var(--color-lightblue); }
-
-        /* 상태 띠 (좌측) */
-        .status-bar { position: absolute; left: 0; top: 0; bottom: 0; width: 6px; background: #eee; }
-        .status-good { background: var(--color-teal); }
-        .status-check { background: var(--color-magenta); }
-
-        .m-header { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
-        .m-avatar {
-            width: 60px; height: 60px; border-radius: 50%; background: #eee;
-            display: flex; align-items: center; justify-content: center; font-size: 24px;
-            border: 2px solid #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .m-info h3 { font-size: 18px; font-weight: 700; margin-bottom: 4px; color: #333; }
-        .m-info p { font-size: 14px; color: #666; }
-
-        .m-stats { display: flex; justify-content: space-between; margin-top: 16px; padding-top: 16px; border-top: 1px solid #f5f5f5; }
-        .stat-item { text-align: center; font-size: 12px; color: #888; }
-        .stat-val { font-size: 14px; font-weight: 700; color: #333; margin-top: 4px; display: block; }
-        .tag-pill {
-            display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600;
-            background: #f0f0f0; color: #555; margin-top: 12px;
-        }
-
-        /* --- [VIEW 2] 상세 프로필 스타일 --- */
-        .back-btn {
-            display: inline-flex; align-items: center; gap: 6px;
-            margin-bottom: 20px; font-size: 15px; color: #666; font-weight: 500; cursor: pointer;
-            background: #fff; padding: 8px 16px; border-radius: 8px; border: 1px solid #ddd;
-            transition: all 0.2s;
-        }
-        .back-btn:hover { background: #f9f9f9; color: var(--color-purple); border-color: var(--color-purple); }
-
-        .dashboard-grid {
-            display: grid; grid-template-columns: 340px 1fr 1fr; grid-template-rows: auto auto; gap: 24px;
-        }
-
-        /* 상세 카드 공통 */
+        .grid-row { display: grid; gap: 24px; margin-bottom: 24px; }
+        .col-2 { grid-template-columns: 1fr 1fr; }
+        
         .card {
-            background: var(--color-card-bg); border-radius: 16px; padding: 28px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.03); border: 1px solid #eee;
+            background: #fff; border-radius: 16px; padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03); border: 1px solid #eee;
         }
-        .card-header {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid #f0f0f0;
-        }
-        .card-title { font-size: 18px; font-weight: 700; color: #333; display: flex; align-items: center; gap: 8px; }
-        .card-title::before { content: ''; display: block; width: 4px; height: 18px; background: var(--color-purple); border-radius: 2px; }
+        .card-head { font-size: 16px; font-weight: 700; color: #555; margin-bottom: 20px; border-bottom: 1px solid #f5f5f5; padding-bottom: 10px; }
 
-        /* 프로필 카드 */
+        /* --- [기본정보 탭 스타일] --- */
         .profile-card { grid-row: span 2; display: flex; flex-direction: column; }
         .profile-summary { text-align: center; margin-bottom: 30px; }
         .profile-img-lg {
-            width: 110px; height: 110px; background: linear-gradient(135deg, #ccc, #999);
+            width: 100px; height: 100px; background: linear-gradient(135deg, #eee, #ccc);
             border-radius: 50%; margin: 0 auto 16px; display: flex; align-items: center; justify-content: center;
             font-size: 40px; color: #fff; border: 4px solid #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
-        .profile-name-lg { font-size: 26px; font-weight: 700; color: #333; margin-bottom: 6px; }
-        .profile-job-lg { font-size: 16px; color: #666; font-weight: 500; margin-bottom: 20px; }
+        .profile-name-lg { font-size: 24px; font-weight: 700; color: #333; margin-bottom: 6px; }
+        .profile-job-lg { font-size: 15px; color: #666; font-weight: 500; margin-bottom: 20px; }
+        
+        .keyword-box { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 24px; }
+        .keyword { padding: 4px 10px; border-radius: 12px; font-size: 12px; background: #f0f0f0; color: #555; }
+
         .info-list { list-style: none; }
-        .info-item { display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid #f5f5f5; font-size: 15px; }
+        .info-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f9f9f9; font-size: 14px; }
         .info-label { color: #888; }
         .info-value { font-weight: 600; color: #333; }
 
-        /* 역량/강점/성장/이력 카드 스타일 */
+        /* 역량 카드 */
         .competency-card { grid-column: span 1; }
-        .progress-track { width: 100%; height: 8px; background: #eee; border-radius: 4px; overflow: hidden; margin-top: 6px;}
-        .progress-fill { height: 100%; border-radius: 4px; }
-        .skill-row { margin-bottom: 16px; font-size: 14px; font-weight: 500;}
+        .skill-row { margin-bottom: 12px; font-size: 14px; }
+        .skill-meta { display: flex; justify-content: space-between; margin-bottom: 6px; }
+        .progress-track { width: 100%; height: 8px; background: #eee; border-radius: 4px; overflow: hidden; }
+        .progress-fill { height: 100%; border-radius: 4px; background: var(--color-purple); }
 
-        .swot-card { grid-column: span 1; display: flex; gap: 20px; }
+        /* SWOT 카드 */
+        .swot-card { grid-column: span 1; display: flex; gap: 16px; }
         .swot-col { flex: 1; }
         .swot-head { font-size: 14px; font-weight: 700; margin-bottom: 10px; }
-        .swot-item { font-size: 13px; padding: 10px; border-radius: 8px; background: #f9f9f9; margin-bottom: 8px; }
+        .swot-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+        .swot-item { font-size: 12px; padding: 8px; border-radius: 8px; background: #f9f9f9; line-height: 1.4; }
         .strength .swot-item { border-left: 3px solid var(--color-magenta); }
         .weakness .swot-item { border-left: 3px solid var(--color-teal); }
 
+        /* 성장곡선 & 이력 */
         .growth-card { grid-column: span 1; }
         .history-card { grid-column: span 1; }
-        .timeline-item { position: relative; padding-bottom: 20px; padding-left: 20px; border-left: 2px solid #eee; margin-left: 5px; }
-        .timeline-dot { position: absolute; left: -6px; top: 0; width: 10px; height: 10px; background: #fff; border: 3px solid var(--color-purple); border-radius: 50%; }
+        .timeline { position: relative; padding-left: 16px; max-height: 200px; overflow-y: auto; }
+        .timeline::before { content: ''; position: absolute; left: 5px; top: 6px; bottom: 0; width: 2px; background: #eee; }
+        .timeline-item { position: relative; padding-bottom: 20px; padding-left: 16px; }
+        .timeline-dot { position: absolute; left: -16px; top: 0; width: 10px; height: 10px; background: #fff; border: 3px solid var(--color-purple); border-radius: 50%; z-index: 1; }
+        .timeline-date { font-size: 12px; font-weight: 700; color: var(--color-purple); margin-bottom: 2px; }
+        .timeline-content { font-size: 13px; color: #333; }
+        .timeline-sub { font-size: 12px; color: #888; margin-top: 2px; }
+
+        /* --- 성과 (Performance) 스타일 --- */
+        .kpi-container { display: flex; align-items: center; justify-content: space-around; }
+        .donut-chart { position: relative; width: 140px; height: 140px; }
+        .donut-circle-bg { fill: none; stroke: #eee; stroke-width: 10; }
+        .donut-circle {
+            fill: none; stroke: var(--color-magenta); stroke-width: 10;
+            stroke-dasharray: 440; stroke-dashoffset: 44; /* 90% */
+            transform: rotate(-90deg); transform-origin: 50% 50%;
+            transition: stroke-dashoffset 1s ease-out;
+        }
+        .donut-text {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            text-align: center;
+        }
+        .kpi-score { font-size: 28px; font-weight: 700; color: var(--color-magenta); }
+        .kpi-label { font-size: 12px; color: #888; }
+        
+        .kpi-detail ul { list-style: none; font-size: 13px; color: #666; }
+        .kpi-detail li { margin-bottom: 8px; display: flex; justify-content: space-between; width: 100%; }
+        .kpi-name { font-weight: 500; }
+        
+        /* 핵심가치 */
+        .value-list { display: flex; flex-direction: column; gap: 12px; }
+        .value-item { display: flex; align-items: center; gap: 12px; }
+        .value-name { width: 100px; font-size: 14px; font-weight: 500; }
+        .value-track { flex: 1; height: 8px; background: #eee; border-radius: 4px; overflow: hidden; }
+        .value-fill { height: 100%; background: var(--color-teal); border-radius: 4px; }
+        .value-score { width: 30px; text-align: right; font-size: 13px; font-weight: 700; color: var(--color-teal); }
+
+        /* --- 육성 (Development) 스타일 --- */
+        .career-path { display: flex; align-items: center; justify-content: center; gap: 20px; background: #f9f9f9; padding: 20px; border-radius: 12px; }
+        .career-box {
+            background: #fff; padding: 16px 24px; border-radius: 12px; border: 1px solid #ddd;
+            text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); min-width: 160px;
+        }
+        .c-label { font-size: 12px; color: #888; margin-bottom: 4px; }
+        .c-job { font-size: 16px; font-weight: 700; color: #333; }
+        .c-arrow { font-size: 24px; color: #ccc; }
+        
+        .goal-card { background: #fff; border-left: 4px solid #ddd; }
+        .goal-card.competency { border-left-color: var(--color-purple); }
+        .goal-card.business { border-left-color: var(--color-lightblue); }
+        
+        .goal-list { list-style: none; margin-top: 10px; }
+        .goal-item {
+            position: relative; padding-left: 20px; margin-bottom: 10px; font-size: 14px; color: #555;
+        }
+        .goal-item::before {
+            content: '•'; position: absolute; left: 6px; color: #888;
+        }
+        .goal-date { font-size: 12px; color: #999; margin-left: 6px; }
+
+        /* 탭 전환 로직용 클래스 */
+        .view-section { display: none; animation: fadeIn 0.3s; }
+        .view-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
     </style>
 </head>
 <body>
 
+    <!-- 1. 헤더 -->
     <header>
-        <div class="top-bar">
-            <!-- 로고 클릭 시 홈(목록)으로 이동 -->
-            <div class="site-title" onclick="showListView()">LG Chem</div>
-            <div class="search-container">
-                <input type="text" class="search-box" placeholder="#구성원 검색">
-                <span class="search-icon">🔍</span>
-            </div>
-        </div>
-        <ul class="nav-tabs">
-            <li class="tab-item active"><span class="tab-link">기본정보</span></li>
-            <li class="tab-item"><span class="tab-link">육성</span></li>
-            <li class="tab-item"><span class="tab-link">피드백 전달</span></li>
-        </ul>
+        <div class="site-title">LG Chem</div>
+        <input type="text" class="search-box" placeholder="전체 구성원 검색">
     </header>
 
-    <main>
+    <!-- 2. 팀원 선택 바 (Sticky) -->
+    <div class="member-bar">
+        <div class="member-label">My Team (5)</div>
         
-        <!-- [VIEW 1] 팀원 목록 화면 -->
-        <section id="view-list" class="fade-in">
-            <div class="team-header">
-                <div class="page-title">내 팀원 목록 <span class="member-count">5</span></div>
-                <div style="font-size: 14px; color: #666;">업데이트: 2024.05.28</div>
+        <div class="member-chip active" onclick="selectMember(this, '박태희')">
+            <div class="chip-avatar">👩🏻‍💻</div>
+            <div class="chip-info">
+                <div class="chip-name">박태희 선임</div>
+                <div class="chip-job">Data Scientist</div>
             </div>
+        </div>
+        <div class="member-chip" onclick="selectMember(this, '박재현')">
+            <div class="chip-avatar">👨🏻‍🔬</div>
+            <div class="chip-info">
+                <div class="chip-name">박재현 책임</div>
+                <div class="chip-job">AI Researcher</div>
+            </div>
+        </div>
+        <div class="member-chip" onclick="selectMember(this, '박정호')">
+            <div class="chip-avatar">👨🏻‍💼</div>
+            <div class="chip-info">
+                <div class="chip-name">박정호 책임</div>
+                <div class="chip-job">Project Manager</div>
+            </div>
+        </div>
+        <div class="member-chip" onclick="selectMember(this, '박재원')">
+            <div class="chip-avatar">👨🏻‍💻</div>
+            <div class="chip-info">
+                <div class="chip-name">박재원 선임</div>
+                <div class="chip-job">Software Eng.</div>
+            </div>
+        </div>
+        <div class="member-chip" onclick="selectMember(this, '하유림')">
+            <div class="chip-avatar">👩🏻‍🎨</div>
+            <div class="chip-info">
+                <div class="chip-name">하유림 선임</div>
+                <div class="chip-job">UX Designer</div>
+            </div>
+        </div>
+    </div>
 
-            <div class="member-grid">
+    <!-- 3. 탭 네비게이션 -->
+    <nav class="nav-tabs-container">
+        <ul class="nav-tabs">
+            <li class="tab-item active" onclick="switchTab('basic', this)">
+                <a class="tab-link">기본정보</a>
+            </li>
+            <li class="tab-item" onclick="switchTab('perf-dev', this)">
+                <a class="tab-link">성과 & 육성</a>
+            </li>
+            <li class="tab-item" onclick="switchTab('feedback', this)">
+                <a class="tab-link">피드백 전달</a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- 4. 메인 컨텐츠 -->
+    <main>
+
+        <!-- [TAB 1] 기본정보 -->
+        <section id="view-basic" class="view-section active">
+            <!-- 3단 그리드 레이아웃: 프로필(좌) + 역량/SWOT(중) + 성장/이력(우) -->
+            <div class="grid-dashboard">
                 
-                <!-- 1. 박태희 -->
-                <div class="member-card" onclick="showDetailView('박태희 선임', 'Data Scientist', '#데이터분석 #통계 #논리적')">
-                    <div class="status-bar status-good"></div>
-                    <div class="m-header">
-                        <div class="m-avatar">👩🏻‍💻</div>
-                        <div class="m-info">
-                            <h3>박태희 선임</h3>
-                            <p>Data Scientist</p>
+                <!-- 1. 프로필 카드 -->
+                <div class="card profile-card">
+                    <div class="card-head">프로필</div>
+                    <div class="profile-summary">
+                        <div class="profile-img-lg" id="basic-avatar">👩🏻‍💻</div>
+                        <div class="profile-name-lg" id="basic-name">박태희 선임</div>
+                        <div class="profile-job-lg" id="basic-job">DX 추진팀 / Data Scientist</div>
+                        
+                        <div class="keyword-box" id="basic-keywords">
+                            <!-- JS로 주입 -->
+                            <span class="keyword">#데이터분석</span><span class="keyword">#통계</span>
                         </div>
                     </div>
-                    <div class="tag-pill">#데이터분석 #통계</div>
-                    <div class="m-stats">
-                        <div class="stat-item">평가<span class="stat-val">S</span></div>
-                        <div class="stat-item">근속<span class="stat-val">5년</span></div>
-                        <div class="stat-item">성장<span class="stat-val" style="color:var(--color-magenta)">▲ High</span></div>
+                    <ul class="info-list">
+                        <li class="info-item"><span class="info-label">사번</span><span class="info-value">LG-2019001</span></li>
+                        <li class="info-item"><span class="info-label">총 경력</span><span class="info-value" id="basic-years">5년 3개월</span></li>
+                        <li class="info-item"><span class="info-label">입사일</span><span class="info-value" id="basic-joindate">2019.01.05</span></li>
+                        <li class="info-item"><span class="info-label">최종평가</span><span class="info-value" id="basic-eval">S (2023)</span></li>
+                        <li class="info-item"><span class="info-label">MBTI</span><span class="info-value" id="basic-mbti">INTJ</span></li>
+                    </ul>
+                </div>
+
+                <!-- 2. 역량 & SWOT -->
+                <div style="display:flex; flex-direction:column; gap:24px;">
+                    <!-- 역량 -->
+                    <div class="card competency-card">
+                        <div class="card-head">전문 역량 (Competency)</div>
+                        <div id="basic-skills">
+                            <!-- JS로 주입 -->
+                        </div>
+                    </div>
+                    <!-- SWOT -->
+                    <div class="card swot-card">
+                        <div class="swot-col strength">
+                            <div class="swot-head" style="color:var(--color-magenta)">🔥 강점</div>
+                            <ul class="swot-list" id="basic-strengths">
+                                <!-- JS로 주입 -->
+                            </ul>
+                        </div>
+                        <div class="swot-col weakness">
+                            <div class="swot-head" style="color:var(--color-teal)">💡 보완점</div>
+                            <ul class="swot-list" id="basic-weaknesses">
+                                <!-- JS로 주입 -->
+                            </ul>
+                        </div>
                     </div>
                 </div>
 
-                <!-- 2. 박재현 -->
-                <div class="member-card" onclick="showDetailView('박재현 책임', 'AI Researcher', '#AI #딥러닝 #혁신')">
-                    <div class="status-bar status-good"></div>
-                    <div class="m-header">
-                        <div class="m-avatar">👨🏻‍🔬</div>
-                        <div class="m-info">
-                            <h3>박재현 책임</h3>
-                            <p>AI Researcher</p>
+                <!-- 3. 성장곡선 & 이력 -->
+                <div style="display:flex; flex-direction:column; gap:24px;">
+                    <!-- 성장곡선 -->
+                    <div class="card growth-card">
+                        <div class="card-head">성장 곡선</div>
+                        <div style="height:150px; display:flex; align-items:center; justify-content:center;">
+                            <svg width="100%" height="100%" viewBox="0 0 300 150">
+                                <path d="M20 120 Q 100 110, 150 80 T 280 30" fill="none" stroke="var(--color-purple)" stroke-width="3"/>
+                                <circle cx="20" cy="120" r="4" fill="#fff" stroke="var(--color-purple)" stroke-width="2"/>
+                                <circle cx="150" cy="80" r="4" fill="#fff" stroke="var(--color-purple)" stroke-width="2"/>
+                                <circle cx="280" cy="30" r="6" fill="#fff" stroke="var(--color-purple)" stroke-width="2"/>
+                            </svg>
                         </div>
+                        <p style="font-size:13px; color:#666; text-align:center; margin-top:5px;">
+                            최근 <strong>분석 역량</strong>이 가파르게 성장 중
+                        </p>
                     </div>
-                    <div class="tag-pill">#AI #딥러닝</div>
-                    <div class="m-stats">
-                        <div class="stat-item">평가<span class="stat-val">A</span></div>
-                        <div class="stat-item">근속<span class="stat-val">8년</span></div>
-                        <div class="stat-item">성장<span class="stat-val">Stable</span></div>
-                    </div>
-                </div>
-
-                <!-- 3. 박정호 -->
-                <div class="member-card" onclick="showDetailView('박정호 책임', 'Project Manager', '#PM #커뮤니케이션 #리더십')">
-                    <div class="status-bar status-check"></div>
-                    <div class="m-header">
-                        <div class="m-avatar">👨🏻‍💼</div>
-                        <div class="m-info">
-                            <h3>박정호 책임</h3>
-                            <p>Project Manager</p>
+                    <!-- 이력 -->
+                    <div class="card history-card">
+                        <div class="card-head">주요 이력 (History)</div>
+                        <div class="timeline" id="basic-history">
+                            <!-- JS로 주입 -->
                         </div>
-                    </div>
-                    <div class="tag-pill">#PM #리더십</div>
-                    <div class="m-stats">
-                        <div class="stat-item">평가<span class="stat-val">A+</span></div>
-                        <div class="stat-item">근속<span class="stat-val">12년</span></div>
-                        <div class="stat-item">성장<span class="stat-val">Stable</span></div>
-                    </div>
-                </div>
-
-                 <!-- 4. 박재원 -->
-                 <div class="member-card" onclick="showDetailView('박재원 선임', 'Software Engineer', '#개발 #클라우드 #문제해결')">
-                    <div class="status-bar status-good"></div>
-                    <div class="m-header">
-                        <div class="m-avatar">👨🏻‍💻</div>
-                        <div class="m-info">
-                            <h3>박재원 선임</h3>
-                            <p>Software Engineer</p>
-                        </div>
-                    </div>
-                    <div class="tag-pill">#개발 #클라우드</div>
-                    <div class="m-stats">
-                        <div class="stat-item">평가<span class="stat-val">A</span></div>
-                        <div class="stat-item">근속<span class="stat-val">3년</span></div>
-                        <div class="stat-item">성장<span class="stat-val" style="color:var(--color-magenta)">▲ High</span></div>
-                    </div>
-                </div>
-
-                <!-- 5. 하유림 -->
-                <div class="member-card" onclick="showDetailView('하유림 선임', 'UX Designer', '#디자인 #사용자중심 #창의적')">
-                    <div class="status-bar status-good"></div>
-                    <div class="m-header">
-                        <div class="m-avatar">👩🏻‍🎨</div>
-                        <div class="m-info">
-                            <h3>하유림 선임</h3>
-                            <p>UX Designer</p>
-                        </div>
-                    </div>
-                    <div class="tag-pill">#디자인 #사용자경험</div>
-                    <div class="m-stats">
-                        <div class="stat-item">평가<span class="stat-val">A</span></div>
-                        <div class="stat-item">근속<span class="stat-val">4년</span></div>
-                        <div class="stat-item">성장<span class="stat-val">Stable</span></div>
                     </div>
                 </div>
 
             </div>
         </section>
 
-
-        <!-- [VIEW 2] 상세 프로필 화면 (초기엔 숨김) -->
-        <section id="view-detail" class="hidden fade-in">
-            <!-- 뒤로가기 버튼 -->
-            <div class="back-btn" onclick="showListView()">
-                <span>← 팀원 목록으로 돌아가기</span>
+        <!-- [TAB 2] 성과 & 육성 -->
+        <section id="view-perf-dev" class="view-section">
+            
+            <!-- SECTION: 성과 (Performance) -->
+            <div class="section-header">
+                <span class="section-tag" style="background:var(--color-magenta)">Performance</span>
+                <div class="section-title">2023년 성과 리포트</div>
             </div>
 
-            <div class="dashboard-grid">
-                <!-- 좌측 프로필 카드 -->
-                <div class="card profile-card">
-                    <div class="card-header"><span class="card-title">프로필</span></div>
-                    <div class="profile-summary">
-                        <div class="profile-img-lg" id="detail-avatar">🧑🏻‍💻</div>
-                        <div class="profile-name-lg" id="detail-name">이름</div>
-                        <div class="profile-job-lg" id="detail-job">직무</div>
-                        <div class="keyword-box" id="detail-keywords">
-                            <!-- 키워드는 스크립트에서 동적 생성 -->
+            <div class="grid-row col-2">
+                <!-- 카드 1: 업무 달성도 (OKR/KPI) -->
+                <div class="card">
+                    <div class="card-head">업무 달성도 (OKR)</div>
+                    <div class="kpi-container">
+                        <!-- 도넛 차트 -->
+                        <div class="donut-chart">
+                            <svg width="140" height="140">
+                                <circle class="donut-circle-bg" cx="70" cy="70" r="60"></circle>
+                                <circle class="donut-circle" cx="70" cy="70" r="60"></circle>
+                            </svg>
+                            <div class="donut-text">
+                                <div class="kpi-score">90%</div>
+                                <div class="kpi-label">달성률</div>
+                            </div>
+                        </div>
+                        <!-- 세부 항목 -->
+                        <div class="kpi-detail">
+                            <ul>
+                                <li>
+                                    <span class="kpi-name">DX 데이터 파이프라인 구축</span>
+                                    <span style="color:var(--color-teal); font-weight:700;">100%</span>
+                                </li>
+                                <li>
+                                    <span class="kpi-name">AI 모델 정확도 95% 달성</span>
+                                    <span style="color:var(--color-magenta); font-weight:700;">92%</span>
+                                </li>
+                                <li>
+                                    <span class="kpi-name">현장 적용 파일럿 테스트</span>
+                                    <span style="color:#888;">85% (진행중)</span>
+                                </li>
+                            </ul>
                         </div>
                     </div>
-                    <ul class="info-list">
-                        <li class="info-item"><span class="info-label">사번</span><span class="info-value">LG-2019001</span></li>
-                        <li class="info-item"><span class="info-label">총 경력</span><span class="info-value">N년</span></li>
-                        <li class="info-item"><span class="info-label">입사일</span><span class="info-value">2019.01.05</span></li>
-                        <li class="info-item"><span class="info-label">최종평가</span><span class="info-value">A (2023)</span></li>
+                </div>
+
+                <!-- 카드 2: 핵심가치 준수도 -->
+                <div class="card">
+                    <div class="card-head">핵심가치 (Core Values)</div>
+                    <div class="value-list">
+                        <div class="value-item">
+                            <span class="value-name">고객가치</span>
+                            <div class="value-track"><div class="value-fill" style="width: 95%;"></div></div>
+                            <span class="value-score">S</span>
+                        </div>
+                        <div class="value-item">
+                            <span class="value-name">미래지향</span>
+                            <div class="value-track"><div class="value-fill" style="width: 80%; background:var(--color-purple)"></div></div>
+                            <span class="value-score">A</span>
+                        </div>
+                        <div class="value-item">
+                            <span class="value-name">도전/혁신</span>
+                            <div class="value-track"><div class="value-fill" style="width: 90%; background:var(--color-magenta)"></div></div>
+                            <span class="value-score">S</span>
+                        </div>
+                        <div class="value-item">
+                            <span class="value-name">협업/소통</span>
+                            <div class="value-track"><div class="value-fill" style="width: 70%; background:#ccc"></div></div>
+                            <span class="value-score">B+</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr style="border:0; border-top:1px dashed #ddd; margin: 40px 0;">
+
+            <!-- SECTION: 육성 (Development) -->
+            <div class="section-header">
+                <span class="section-tag" style="background:var(--color-teal)">Development</span>
+                <div class="section-title">CDP & 성장 목표</div>
+            </div>
+
+            <!-- 커리어 패스 -->
+            <div class="card" style="margin-bottom: 24px;">
+                <div class="card-head">커리어 패스 (Career Path)</div>
+                <div class="career-path">
+                    <div class="career-box">
+                        <div class="c-label">Current</div>
+                        <div class="c-job">Data Scientist</div>
+                        <div style="font-size:12px; color:#666; margin-top:4px;">모델링 & 분석 실무</div>
+                    </div>
+                    <div class="c-arrow">➜</div>
+                    <div class="career-box" style="border-color:var(--color-purple); background:#fdfdfd;">
+                        <div class="c-label" style="color:var(--color-purple)">Desired (3년 후)</div>
+                        <div class="c-job">Data Tech Lead</div>
+                        <div style="font-size:12px; color:#666; margin-top:4px;">기술 리딩 & 아키텍처</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 목표 그리드 -->
+            <div class="grid-row col-2">
+                <!-- 역량/경력 목표 -->
+                <div class="card goal-card competency">
+                    <div class="card-head" style="border:none; margin-bottom:10px;">🚩 역량 & 경력 목표</div>
+                    <div style="font-size:13px; color:#666; margin-bottom:12px;">직무 전문성을 강화하기 위한 개인적 목표</div>
+                    <ul class="goal-list">
+                        <li class="goal-item">
+                            MLOps 파이프라인 구축 경험 확보 <span class="goal-date">(~2024.06)</span>
+                        </li>
+                        <li class="goal-item">
+                            클라우드(AWS) 솔루션 아키텍트 자격 취득 <span class="goal-date">(~2024.12)</span>
+                        </li>
+                        <li class="goal-item">
+                            사내 데이터 분석 강사 활동 (멘토링)
+                        </li>
                     </ul>
                 </div>
 
-                <!-- 역량 카드 -->
-                <div class="card competency-card">
-                    <div class="card-header"><span class="card-title">전문 역량 (Competency)</span></div>
-                    <div class="skill-row">
-                        <div style="display:flex; justify-content:space-between;"><span>Core Skill</span><span>Lv.4 Expert</span></div>
-                        <div class="progress-track"><div class="progress-fill" style="width: 85%; background: var(--color-purple);"></div></div>
-                    </div>
-                    <div class="skill-row">
-                        <div style="display:flex; justify-content:space-between;"><span>Sub Skill</span><span>Lv.3 Advanced</span></div>
-                        <div class="progress-track"><div class="progress-fill" style="width: 70%; background: var(--color-magenta);"></div></div>
-                    </div>
+                <!-- 미래 비즈니스 목표 -->
+                <div class="card goal-card business">
+                    <div class="card-head" style="border:none; margin-bottom:10px;">🌏 미래 비즈니스 목표</div>
+                    <div style="font-size:13px; color:#666; margin-bottom:12px;">조직의 미래 방향성에 기여하기 위한 목표</div>
+                    <ul class="goal-list">
+                        <li class="goal-item">
+                            생성형 AI(LLM) 기반 사내 챗봇 PoC 개발
+                        </li>
+                        <li class="goal-item">
+                            공정 데이터 실시간 이상 탐지 모델 정확도 98%
+                        </li>
+                        <li class="goal-item">
+                            글로벌 사업장 데이터 표준화 프로젝트 참여
+                        </li>
+                    </ul>
                 </div>
+            </div>
 
-                <!-- 강점/약점 -->
-                <div class="card swot-card">
-                    <div class="swot-col strength">
-                        <div class="swot-head" style="color:var(--color-magenta)">🔥 강점</div>
-                        <div class="swot-item">문제 핵심 파악 능력</div>
-                        <div class="swot-item">새로운 툴 학습 속도</div>
-                    </div>
-                    <div class="swot-col weakness">
-                        <div class="swot-head" style="color:var(--color-teal)">💡 보완점</div>
-                        <div class="swot-item">동시다발 업무 시 스트레스</div>
-                        <div class="swot-item">대면 발표 스킬</div>
-                    </div>
-                </div>
+        </section>
 
-                <!-- 성장 곡선 -->
-                <div class="card growth-card">
-                    <div class="card-header"><span class="card-title">성장 곡선</span></div>
-                    <div style="height:150px; display:flex; align-items:center; justify-content:center; background:#fafafa; border-radius:8px;">
-                        <svg width="100%" height="100%" viewBox="0 0 300 150">
-                            <path d="M20 120 Q 100 110, 150 80 T 280 30" fill="none" stroke="var(--color-purple)" stroke-width="3"/>
-                            <circle cx="20" cy="120" r="4" fill="#fff" stroke="var(--color-purple)" stroke-width="2"/>
-                            <circle cx="280" cy="30" r="4" fill="#fff" stroke="var(--color-purple)" stroke-width="2"/>
-                        </svg>
-                    </div>
-                    <p style="font-size:13px; color:#666; margin-top:10px; text-align:center;">최근 6개월간 역량이 가파르게 상승함</p>
-                </div>
-
-                <!-- 이력 -->
-                <div class="card history-card">
-                    <div class="card-header"><span class="card-title">주요 이력</span></div>
-                    <div class="timeline-item">
-                        <div class="timeline-dot"></div>
-                        <div class="timeline-date">2023.01 ~ 현재</div>
-                        <div><strong>DX 추진팀 이동</strong></div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-dot" style="border-color:#ccc"></div>
-                        <div class="timeline-date">2019.01</div>
-                        <div>신입 입사</div>
-                    </div>
-                </div>
-
+        <!-- [TAB 3] 피드백 (Placeholder) -->
+        <section id="view-feedback" class="view-section">
+            <div style="text-align:center; padding:50px; color:#888;">
+                <h3>피드백 전달 탭입니다.</h3>
+                <p>(면담 기록 및 피드백 작성 기능이 제공됩니다)</p>
             </div>
         </section>
 
     </main>
 
     <script>
-        // 화면 전환 로직
-        function showDetailView(name, job, keywords) {
-            // 1. 목록 숨기기, 상세 보이기
-            document.getElementById('view-list').classList.add('hidden');
-            document.getElementById('view-detail').classList.remove('hidden');
-            
-            // 2. 정보 업데이트 (전달받은 전체 이름을 그대로 사용)
-            document.getElementById('detail-name').textContent = name;
-            document.getElementById('detail-job').textContent = "DX 추진팀 / " + job;
-            
-            // 키워드 업데이트
-            const keywordBox = document.getElementById('detail-keywords');
-            keywordBox.innerHTML = ''; // 초기화
-            if (keywords) {
-                const tags = keywords.split(' ');
-                tags.forEach(tag => {
-                    const span = document.createElement('span');
-                    span.className = 'keyword';
-                    span.style.background = '#f0f0f0';
-                    span.style.padding = '6px 12px';
-                    span.style.borderRadius = '12px';
-                    span.style.fontSize = '13px';
-                    span.style.marginRight = '6px';
-                    span.textContent = tag;
-                    keywordBox.appendChild(span);
-                });
+        // 팀원별 상세 데이터 정의
+        const teamData = {
+            '박태희': {
+                name: '박태희 선임',
+                job: 'Data Scientist',
+                avatar: '👩🏻‍💻',
+                years: '5년 3개월',
+                joinDate: '2019.01.05',
+                eval: 'S (2023)',
+                mbti: 'INTJ',
+                keywords: ['#데이터분석', '#통계', '#논리적'],
+                skills: [
+                    { name: 'Python Data Analysis', level: 'Lv.4 Expert', percent: 85, color: 'var(--color-purple)' },
+                    { name: 'Machine Learning', level: 'Lv.3 Advanced', percent: 70, color: 'var(--color-magenta)' }
+                ],
+                strengths: ['문제 핵심 파악 능력', '새로운 툴 학습 속도', '데이터 기반 의사결정'],
+                weaknesses: ['동시다발 업무 시 스트레스', '대면 발표 스킬 부족'],
+                history: [
+                    { date: '2023.01 ~ 현재', title: 'DX 추진팀 이동', desc: '전사 AI 프로젝트 모델링 리드' },
+                    { date: '2021.03', title: '직무 순환 (Task Force)', desc: '공정 데이터 분석 TF 참여' },
+                    { date: '2019.01', title: '신입 입사', desc: '석유화학본부 생산기술팀' }
+                ]
+            },
+            '박재현': {
+                name: '박재현 책임',
+                job: 'AI Researcher',
+                avatar: '👨🏻‍🔬',
+                years: '8년 1개월',
+                joinDate: '2016.03.02',
+                eval: 'A (2023)',
+                mbti: 'INTP',
+                keywords: ['#AI', '#딥러닝', '#기술혁신'],
+                skills: [
+                    { name: 'Deep Learning (PyTorch)', level: 'Lv.5 Master', percent: 95, color: 'var(--color-purple)' },
+                    { name: 'Computer Vision', level: 'Lv.4 Expert', percent: 80, color: 'var(--color-magenta)' }
+                ],
+                strengths: ['최신 기술 트렌드 파악', '깊이 있는 연구 역량', '알고리즘 최적화'],
+                weaknesses: ['비즈니스 적용 관점 부족', '문서화 작업 기피'],
+                history: [
+                    { date: '2022.01 ~ 현재', title: 'AI 선행연구팀', desc: '비전 검사 알고리즘 고도화' },
+                    { date: '2018.06', title: '박사 학위 취득 후 입사', desc: 'CTO 산하 AI 연구소' }
+                ]
+            },
+            '박정호': {
+                name: '박정호 책임',
+                job: 'Project Manager',
+                avatar: '👨🏻‍💼',
+                years: '12년 5개월',
+                joinDate: '2012.01.10',
+                eval: 'A+ (2023)',
+                mbti: 'ENTJ',
+                keywords: ['#리더십', '#일정관리', '#커뮤니케이션'],
+                skills: [
+                    { name: 'Project Management', level: 'Lv.5 Master', percent: 92, color: 'var(--color-purple)' },
+                    { name: 'Stakeholder Mgmt', level: 'Lv.4 Expert', percent: 85, color: 'var(--color-teal)' }
+                ],
+                strengths: ['강력한 추진력', '이해관계자 조율 능력', '리스크 관리'],
+                weaknesses: ['디테일한 기술 이해도', '팀원 감성 케어'],
+                history: [
+                    { date: '2020.01 ~ 현재', title: 'DX 프로젝트 리더', desc: '전사 스마트팩토리 구축 PM' },
+                    { date: '2016.01', title: '책임 승진', desc: 'IT 기획팀 파트장' },
+                    { date: '2012.01', title: '신입 입사', desc: '정보전략팀' }
+                ]
+            },
+            '박재원': {
+                name: '박재원 선임',
+                job: 'Software Eng.',
+                avatar: '👨🏻‍💻',
+                years: '3년 2개월',
+                joinDate: '2021.02.15',
+                eval: 'A (2023)',
+                mbti: 'ISFP',
+                keywords: ['#풀스택', '#클라우드', '#문제해결'],
+                skills: [
+                    { name: 'React / Node.js', level: 'Lv.3 Advanced', percent: 75, color: 'var(--color-purple)' },
+                    { name: 'AWS Cloud', level: 'Lv.2 Intermediate', percent: 60, color: 'var(--color-lightblue)' }
+                ],
+                strengths: ['빠른 프로토타이핑', '사용자 친화적 UI 구현', '성실함'],
+                weaknesses: ['대규모 아키텍처 경험', '코드 리뷰 참여 소극적'],
+                history: [
+                    { date: '2021.02', title: '신입 입사', desc: 'DX 추진팀 플랫폼 개발 파트' }
+                ]
+            },
+            '하유림': {
+                name: '하유림 선임',
+                job: 'UX Designer',
+                avatar: '👩🏻‍🎨',
+                years: '4년 6개월',
+                joinDate: '2019.11.01',
+                eval: 'A (2023)',
+                mbti: 'ENFP',
+                keywords: ['#사용자경험', '#창의적', '#디자인'],
+                skills: [
+                    { name: 'UI/UX Design', level: 'Lv.4 Expert', percent: 88, color: 'var(--color-magenta)' },
+                    { name: 'User Research', level: 'Lv.3 Advanced', percent: 70, color: 'var(--color-teal)' }
+                ],
+                strengths: ['사용자 관점의 인사이트', '창의적인 아이디어', '원활한 협업 태도'],
+                weaknesses: ['개발 구현 가능성 고려', '데이터 분석 역량'],
+                history: [
+                    { date: '2022.05 ~ 현재', title: 'DX 추진팀', desc: '사내 시스템 UX 개편' },
+                    { date: '2019.11', title: '경력 입사', desc: '디자인 경영센터' }
+                ]
             }
+        };
+
+        // 초기화 (박태희 데이터 로드)
+        window.onload = function() {
+            renderBasicInfo('박태희');
+        };
+
+        // 팀원 선택 로직
+        function selectMember(element, memberKey) {
+            // 칩 스타일 변경
+            document.querySelectorAll('.member-chip').forEach(chip => chip.classList.remove('active'));
+            element.classList.add('active');
             
-            window.scrollTo(0, 0);
+            // 데이터 렌더링
+            renderBasicInfo(memberKey);
+            
+            // KPI 애니메이션 효과 (성과 탭 데이터 갱신 시늉)
+            const kpiScore = document.querySelector('.kpi-score');
+            if(kpiScore) {
+                kpiScore.style.opacity = '0';
+                setTimeout(() => {
+                    kpiScore.innerHTML = Math.floor(Math.random() * (99 - 85) + 85) + "%";
+                    kpiScore.style.opacity = '1';
+                }, 200);
+            }
         }
 
-        function showListView() {
-            document.getElementById('view-detail').classList.add('hidden');
-            document.getElementById('view-list').classList.remove('hidden');
-            window.scrollTo(0, 0);
+        // 기본정보 렌더링 함수
+        function renderBasicInfo(key) {
+            const data = teamData[key];
+            if (!data) return;
+
+            // 프로필
+            document.getElementById('basic-avatar').textContent = data.avatar;
+            document.getElementById('basic-name').textContent = data.name;
+            document.getElementById('basic-job').textContent = "DX 추진팀 / " + data.job;
+            document.getElementById('basic-years').textContent = data.years;
+            document.getElementById('basic-joindate').textContent = data.joinDate;
+            document.getElementById('basic-eval').textContent = data.eval;
+            document.getElementById('basic-mbti').textContent = data.mbti;
+
+            // 키워드
+            const keywordContainer = document.getElementById('basic-keywords');
+            keywordContainer.innerHTML = data.keywords.map(k => `<span class="keyword">${k}</span>`).join('');
+
+            // 역량 (Skills)
+            const skillsContainer = document.getElementById('basic-skills');
+            skillsContainer.innerHTML = data.skills.map(skill => `
+                <div class="skill-row">
+                    <div class="skill-meta"><span>${skill.name}</span><span>${skill.level}</span></div>
+                    <div class="progress-track">
+                        <div class="progress-fill" style="width: ${skill.percent}%; background: ${skill.color};"></div>
+                    </div>
+                </div>
+            `).join('');
+
+            // 강점 & 보완점
+            document.getElementById('basic-strengths').innerHTML = data.strengths.map(s => `<li class="swot-item">${s}</li>`).join('');
+            document.getElementById('basic-weaknesses').innerHTML = data.weaknesses.map(w => `<li class="swot-item">${w}</li>`).join('');
+
+            // 이력 (Timeline)
+            const historyContainer = document.getElementById('basic-history');
+            historyContainer.innerHTML = data.history.map(h => `
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">${h.date}</div>
+                    <div class="timeline-content">${h.title}</div>
+                    <div class="timeline-sub">${h.desc}</div>
+                </div>
+            `).join('');
+        }
+
+        // 탭 전환 로직
+        function switchTab(tabId, element) {
+            document.querySelectorAll('.tab-item').forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+
+            document.querySelectorAll('.view-section').forEach(section => section.classList.remove('active'));
+            document.getElementById('view-' + tabId).classList.add('active');
         }
     </script>
 
