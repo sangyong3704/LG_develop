@@ -37,6 +37,9 @@
             color: #fff;
             padding: 0 40px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
         .top-bar {
@@ -49,6 +52,7 @@
 
         .site-title {
             font-size: 24px; font-weight: 700; color: #fff; text-decoration: none; letter-spacing: -0.5px; cursor: pointer;
+            display: flex; align-items: center; gap: 8px;
         }
 
         .search-container { position: relative; width: 300px; }
@@ -119,7 +123,7 @@
             background: #f0f0f0; color: #555; margin-top: 12px;
         }
 
-        /* --- [VIEW 2] 상세 프로필 스타일 (이전 코드 통합) --- */
+        /* --- [VIEW 2] 상세 프로필 스타일 --- */
         .back-btn {
             display: inline-flex; align-items: center; gap: 6px;
             margin-bottom: 20px; font-size: 15px; color: #666; font-weight: 500; cursor: pointer;
@@ -159,7 +163,7 @@
         .info-label { color: #888; }
         .info-value { font-weight: 600; color: #333; }
 
-        /* 역량/강점/성장/이력 카드 스타일들은 이전과 동일하지만 간략화 */
+        /* 역량/강점/성장/이력 카드 스타일 */
         .competency-card { grid-column: span 1; }
         .progress-track { width: 100%; height: 8px; background: #eee; border-radius: 4px; overflow: hidden; margin-top: 6px;}
         .progress-fill { height: 100%; border-radius: 4px; }
@@ -183,7 +187,7 @@
 
     <header>
         <div class="top-bar">
-            <!-- 클릭 시 홈(목록)으로 이동 -->
+            <!-- 로고 클릭 시 홈(목록)으로 이동 -->
             <div class="site-title" onclick="showListView()">LG Chem</div>
             <div class="search-container">
                 <input type="text" class="search-box" placeholder="#구성원 검색">
@@ -202,22 +206,23 @@
         <!-- [VIEW 1] 팀원 목록 화면 -->
         <section id="view-list" class="fade-in">
             <div class="team-header">
-                <div class="page-title">내 팀원 목록 <span class="member-count">6</span></div>
-                <div style="font-size: 14px; color: #666;">최근 업데이트: 2024.05.20</div>
+                <div class="page-title">내 팀원 목록 <span class="member-count">5</span></div>
+                <div style="font-size: 14px; color: #666;">업데이트: 2024.05.28</div>
             </div>
 
             <div class="member-grid">
-                <!-- 멤버 1 -->
-                <div class="member-card" onclick="showDetailView('김엘지', 'Data Analyst')">
+                
+                <!-- 1. 박태희 -->
+                <div class="member-card" onclick="showDetailView('박태희', 'Data Scientist', '#데이터분석 #통계 #논리적')">
                     <div class="status-bar status-good"></div>
                     <div class="m-header">
-                        <div class="m-avatar">🧑🏻‍💻</div>
+                        <div class="m-avatar">👩🏻‍💻</div>
                         <div class="m-info">
-                            <h3>김엘지 선임</h3>
-                            <p>Data Analyst</p>
+                            <h3>박태희 선임</h3>
+                            <p>Data Scientist</p>
                         </div>
                     </div>
-                    <div class="tag-pill">#데이터기반 #논리적</div>
+                    <div class="tag-pill">#데이터분석 #통계</div>
                     <div class="m-stats">
                         <div class="stat-item">평가<span class="stat-val">S</span></div>
                         <div class="stat-item">근속<span class="stat-val">5년</span></div>
@@ -225,35 +230,53 @@
                     </div>
                 </div>
 
-                <!-- 멤버 2 -->
-                <div class="member-card" onclick="showDetailView('이화학', 'Process Engineer')">
-                    <div class="status-bar status-check"></div>
+                <!-- 2. 박재현 -->
+                <div class="member-card" onclick="showDetailView('박재현', 'AI Researcher', '#AI #딥러닝 #혁신')">
+                    <div class="status-bar status-good"></div>
                     <div class="m-header">
-                        <div class="m-avatar">👩🏻‍🔬</div>
+                        <div class="m-avatar">👨🏻‍🔬</div>
                         <div class="m-info">
-                            <h3>이화학 책임</h3>
-                            <p>Process Engineer</p>
+                            <h3>박재현 책임</h3>
+                            <p>AI Researcher</p>
                         </div>
                     </div>
-                    <div class="tag-pill">#현장중심 #문제해결</div>
+                    <div class="tag-pill">#AI #딥러닝</div>
                     <div class="m-stats">
                         <div class="stat-item">평가<span class="stat-val">A</span></div>
+                        <div class="stat-item">근속<span class="stat-val">8년</span></div>
+                        <div class="stat-item">성장<span class="stat-val">Stable</span></div>
+                    </div>
+                </div>
+
+                <!-- 3. 박정호 -->
+                <div class="member-card" onclick="showDetailView('박정호', 'Project Manager', '#PM #커뮤니케이션 #리더십')">
+                    <div class="status-bar status-check"></div>
+                    <div class="m-header">
+                        <div class="m-avatar">👨🏻‍💼</div>
+                        <div class="m-info">
+                            <h3>박정호 책임</h3>
+                            <p>Project Manager</p>
+                        </div>
+                    </div>
+                    <div class="tag-pill">#PM #리더십</div>
+                    <div class="m-stats">
+                        <div class="stat-item">평가<span class="stat-val">A+</span></div>
                         <div class="stat-item">근속<span class="stat-val">12년</span></div>
                         <div class="stat-item">성장<span class="stat-val">Stable</span></div>
                     </div>
                 </div>
 
-                <!-- 멤버 3 -->
-                <div class="member-card" onclick="showDetailView('박배터리', 'R&D Researcher')">
+                 <!-- 4. 박재원 -->
+                 <div class="member-card" onclick="showDetailView('박재원', 'Software Engineer', '#개발 #클라우드 #문제해결')">
                     <div class="status-bar status-good"></div>
                     <div class="m-header">
-                        <div class="m-avatar">👨🏻‍🔬</div>
+                        <div class="m-avatar">👨🏻‍💻</div>
                         <div class="m-info">
-                            <h3>박배터리 선임</h3>
-                            <p>R&D Researcher</p>
+                            <h3>박재원 선임</h3>
+                            <p>Software Engineer</p>
                         </div>
                     </div>
-                    <div class="tag-pill">#창의적 #몰입</div>
+                    <div class="tag-pill">#개발 #클라우드</div>
                     <div class="m-stats">
                         <div class="stat-item">평가<span class="stat-val">A</span></div>
                         <div class="stat-item">근속<span class="stat-val">3년</span></div>
@@ -261,23 +284,24 @@
                     </div>
                 </div>
 
-                 <!-- 멤버 4 -->
-                 <div class="member-card" onclick="showDetailView('최생산', 'Plant Manager')">
-                    <div class="status-bar status-check"></div>
+                <!-- 5. 하유림 -->
+                <div class="member-card" onclick="showDetailView('하유림', 'UX Designer', '#디자인 #사용자중심 #창의적')">
+                    <div class="status-bar status-good"></div>
                     <div class="m-header">
-                        <div class="m-avatar">👷🏻</div>
+                        <div class="m-avatar">👩🏻‍🎨</div>
                         <div class="m-info">
-                            <h3>최생산 책임</h3>
-                            <p>Plant Manager</p>
+                            <h3>하유림 선임</h3>
+                            <p>UX Designer</p>
                         </div>
                     </div>
-                    <div class="tag-pill">#리더십 #안전제일</div>
+                    <div class="tag-pill">#디자인 #사용자경험</div>
                     <div class="m-stats">
-                        <div class="stat-item">평가<span class="stat-val">B+</span></div>
-                        <div class="stat-item">근속<span class="stat-val">15년</span></div>
-                        <div class="stat-item">성장<span class="stat-val">Care</span></div>
+                        <div class="stat-item">평가<span class="stat-val">A</span></div>
+                        <div class="stat-item">근속<span class="stat-val">4년</span></div>
+                        <div class="stat-item">성장<span class="stat-val">Stable</span></div>
                     </div>
                 </div>
+
             </div>
         </section>
 
@@ -295,18 +319,17 @@
                     <div class="card-header"><span class="card-title">프로필</span></div>
                     <div class="profile-summary">
                         <div class="profile-img-lg" id="detail-avatar">🧑🏻‍💻</div>
-                        <div class="profile-name-lg" id="detail-name">김엘지 선임</div>
-                        <div class="profile-job-lg" id="detail-job">DX 추진팀 / Data Analyst</div>
-                        <div class="keyword-box">
-                            <span class="keyword" style="background:#f0f0f0; padding:6px 12px; border-radius:12px; font-size:13px;">#데이터기반</span>
-                            <span class="keyword" style="background:#f0f0f0; padding:6px 12px; border-radius:12px; font-size:13px;">#논리적</span>
+                        <div class="profile-name-lg" id="detail-name">이름</div>
+                        <div class="profile-job-lg" id="detail-job">직무</div>
+                        <div class="keyword-box" id="detail-keywords">
+                            <!-- 키워드는 스크립트에서 동적 생성 -->
                         </div>
                     </div>
                     <ul class="info-list">
                         <li class="info-item"><span class="info-label">사번</span><span class="info-value">LG-2019001</span></li>
-                        <li class="info-item"><span class="info-label">총 경력</span><span class="info-value">5년 3개월</span></li>
+                        <li class="info-item"><span class="info-label">총 경력</span><span class="info-value">N년</span></li>
                         <li class="info-item"><span class="info-label">입사일</span><span class="info-value">2019.01.05</span></li>
-                        <li class="info-item"><span class="info-label">최종평가</span><span class="info-value">S (2023)</span></li>
+                        <li class="info-item"><span class="info-label">최종평가</span><span class="info-value">A (2023)</span></li>
                     </ul>
                 </div>
 
@@ -341,7 +364,6 @@
                 <div class="card growth-card">
                     <div class="card-header"><span class="card-title">성장 곡선</span></div>
                     <div style="height:150px; display:flex; align-items:center; justify-content:center; background:#fafafa; border-radius:8px;">
-                        <!-- SVG Graph Placeholder -->
                         <svg width="100%" height="100%" viewBox="0 0 300 150">
                             <path d="M20 120 Q 100 110, 150 80 T 280 30" fill="none" stroke="var(--color-purple)" stroke-width="3"/>
                             <circle cx="20" cy="120" r="4" fill="#fff" stroke="var(--color-purple)" stroke-width="2"/>
@@ -373,26 +395,39 @@
 
     <script>
         // 화면 전환 로직
-        function showDetailView(name, job) {
+        function showDetailView(name, job, keywords) {
             // 1. 목록 숨기기, 상세 보이기
             document.getElementById('view-list').classList.add('hidden');
             document.getElementById('view-detail').classList.remove('hidden');
             
-            // 2. (프로토타입용) 클릭한 사람 정보로 텍스트 업데이트
-            // 실제로는 DB에서 데이터를 가져와야 하지만, 여기선 느낌만 냅니다.
-            document.getElementById('detail-name').textContent = name;
+            // 2. 정보 업데이트
+            document.getElementById('detail-name').textContent = name + (name.includes('책임') ? '' : ' 선임'); // 임시 직급 처리
             document.getElementById('detail-job').textContent = "DX 추진팀 / " + job;
             
-            // 3. 스크롤 최상단으로 이동
+            // 키워드 업데이트
+            const keywordBox = document.getElementById('detail-keywords');
+            keywordBox.innerHTML = ''; // 초기화
+            if (keywords) {
+                const tags = keywords.split(' ');
+                tags.forEach(tag => {
+                    const span = document.createElement('span');
+                    span.className = 'keyword';
+                    span.style.background = '#f0f0f0';
+                    span.style.padding = '6px 12px';
+                    span.style.borderRadius = '12px';
+                    span.style.fontSize = '13px';
+                    span.style.marginRight = '6px';
+                    span.textContent = tag;
+                    keywordBox.appendChild(span);
+                });
+            }
+            
             window.scrollTo(0, 0);
         }
 
         function showListView() {
-            // 1. 상세 숨기기, 목록 보이기
             document.getElementById('view-detail').classList.add('hidden');
             document.getElementById('view-list').classList.remove('hidden');
-            
-            // 2. 스크롤 최상단으로 이동
             window.scrollTo(0, 0);
         }
     </script>
