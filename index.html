@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Leadership Management Prototype</title>
+    <!-- 폰트: 가독성을 위해 Noto Sans KR 적용 -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
     
     <style>
@@ -29,9 +30,10 @@
             color: #333;
         }
 
-        /* 2. 상단 헤더 영역 (Layout) */
+        /* 2. 상단 헤더 영역 (Layout) - 그라디언트 적용 */
         header {
-            background-color: var(--color-purple); /* 레퍼런스 이미지의 어두운 느낌을 팔레트의 보라색으로 구현 */
+            /* 기존 단색 배경을 그라디언트로 변경 */
+            background: linear-gradient(135deg, var(--color-purple) 0%, var(--color-magenta) 100%);
             color: white;
             padding: 0 40px;
             display: flex;
@@ -51,20 +53,6 @@
         .logo-area {
             display: flex;
             align-items: center;
-            font-weight: 700;
-            font-size: 24px;
-        }
-
-        /* LG화학 로고 플레이스홀더 (이미지 URL이 없을 경우를 대비해 텍스트+스타일로 구현하되, 실제 이미지가 있다면 img 태그로 대체 가능) */
-        .lg-logo {
-            /* 실제 로고 이미지가 있다면 아래 img 태그 사용 */
-            /* <img src="URL" alt="LG Chem"> */
-            color: white; 
-            font-style: italic; /* LG 로고 특유의 느낌 흉내 */
-            letter-spacing: -0.5px;
-        }
-        .lg-logo span {
-            color: var(--color-lightblue); /* 포인트 컬러 살짝 가미 */
         }
 
         /* 검색창 (레퍼런스 이미지의 캡슐 형태) */
@@ -74,7 +62,7 @@
 
         .search-box {
             background-color: rgba(255, 255, 255, 0.15); /* 반투명 배경 */
-            border: 1px solid var(--color-lightgray);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 50px; /* 둥근 캡슐 모양 */
             padding: 10px 20px;
             padding-right: 40px;
@@ -86,7 +74,7 @@
         }
 
         .search-box::placeholder {
-            color: #ddd;
+            color: rgba(255, 255, 255, 0.7);
         }
 
         .search-box:focus {
@@ -108,11 +96,13 @@
             color: var(--color-purple);
         }
 
-        /* 3. 메인 탭 (Navigation) */
+        /* 3. 메인 탭 (Navigation) - 중앙 정렬 */
         .nav-tabs {
             display: flex;
-            gap: 40px;
-            margin-top: 10px;
+            justify-content: center; /* 탭을 가운데로 정렬 */
+            gap: 60px; /* 탭 사이 간격 조정 */
+            margin-top: 20px;
+            padding-bottom: 0px;
         }
 
         .tab-item {
@@ -175,10 +165,13 @@
 <body>
 
     <header>
+        <!-- 상단: 로고 및 검색창 -->
         <div class="top-bar">
             <div class="logo-area">
+                <!-- 실제 로고 이미지가 있다면 src를 변경하세요 -->
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/LG_Chem_logo.svg/2560px-LG_Chem_logo.svg.png" alt="LG Chem" height="30" style="filter: brightness(0) invert(1);"> 
-                </div>
+                <!-- filter: 로고를 흰색으로 변경 -->
+            </div>
             
             <div class="search-container">
                 <input type="text" class="search-box" placeholder="#팀원 이름, 부서 검색">
@@ -186,6 +179,7 @@
             </div>
         </div>
 
+        <!-- 하단: 3개 메인 탭 (중앙 정렬됨) -->
         <nav class="nav-tabs">
             <a href="#" class="tab-item active">기본정보</a>
             <a href="#" class="tab-item">육성</a>
@@ -194,11 +188,13 @@
     </header>
 
     <main>
+        <!-- 컨텐츠 예시 영역 -->
         <div class="card">
             <h2>기본정보 대시보드</h2>
-            <p>좌측 상단 로고, 우측 상단 검색창, 그리고 상단 탭 구성이 적용된 프로토타입입니다.</p>
+            <p>상단 헤더에 그라디언트가 적용되었고, 탭이 중앙으로 정렬되었습니다.</p>
             <br>
             <div style="display:flex; justify-content:center; gap:10px;">
+                <!-- 컬러 팔레트 확인용 박스 -->
                 <div style="background:var(--color-magenta); width:50px; height:50px; border-radius:50%;"></div>
                 <div style="background:var(--color-purple); width:50px; height:50px; border-radius:50%;"></div>
                 <div style="background:var(--color-lightblue); width:50px; height:50px; border-radius:50%;"></div>
