@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -194,6 +193,9 @@
         .c-role { font-size: 15px; font-weight: 700; color: #333; }
         .c-node.future .c-role { color: var(--color-purple); }
 
+        .goal-li { position: relative; padding-left: 14px; font-size: 13px; color: #555; margin-bottom: 6px; }
+        .goal-li::before { content: '•'; position: absolute; left: 0; color: #ccc; }
+
         /* [TAB 3] 전달 (NEW CSS) */
         .fb-section { margin-bottom: 32px; animation: fadeIn 0.3s; }
         .fb-label { display: block; font-size: 14px; font-weight: 700; color: #444; margin-bottom: 8px; }
@@ -223,6 +225,7 @@
             background: #fbfbfb; border: 1px solid #eee; border-radius: 12px; padding: 16px; 
             position: relative; transition: all 0.2s;
         }
+        /* 선택된 근거 스타일 */
         .evidence-box.selected {
             background: #f4eff9; border-color: var(--color-purple); box-shadow: 0 4px 10px rgba(85,29,131,0.1);
         }
@@ -262,6 +265,7 @@
         .tab-content { display: none; animation: fadeIn 0.3s ease-out; }
         .tab-content.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
     </style>
 </head>
 <body>
@@ -444,15 +448,15 @@
                             <div class="fb-input-grid">
                                 <div class="fb-input-card">
                                     <div class="fb-input-head" style="color:var(--color-magenta)">🔥 강점 (Strength)</div>
-                                    <textarea id="input-str" class="fb-textarea" placeholder="예: 분석적이라는 강점 덕분에 데이터 기반 의사결정에 큰 도움이 되고 있습니다."></textarea>
+                                    <textarea id="input-str" class="fb-textarea" placeholder="예: 분석적인 사고"></textarea>
                                 </div>
                                 <div class="fb-input-card">
                                     <div class="fb-input-head" style="color:var(--color-teal)">💡 보완점 (Improvement)</div>
-                                    <textarea id="input-imp" class="fb-textarea" placeholder="예: 유관부서와의 소통 빈도를 조금 더 늘렸으면 합니다."></textarea>
+                                    <textarea id="input-imp" class="fb-textarea" placeholder="예: 소통 강화"></textarea>
                                 </div>
                                 <div class="fb-input-card">
                                     <div class="fb-input-head" style="color:var(--color-purple)">🚀 성장/방향 (Growth)</div>
-                                    <textarea id="input-gro" class="fb-textarea" placeholder="예: 향후 전체 프로젝트를 리딩하는 PM으로 성장하길 기대합니다."></textarea>
+                                    <textarea id="input-gro" class="fb-textarea" placeholder="예: 프로젝트 리더 역할"></textarea>
                                 </div>
                             </div>
                             <div style="text-align:right;">
@@ -465,7 +469,7 @@
                         <!-- B. AI 근거 -->
                         <div id="section-evidence" class="fb-section" style="display:none;">
                             <span class="fb-label">2. 데이터 기반 근거 선택 (AI Suggestion)</span>
-                            <p class="fb-desc">AI가 데이터에 기반한 구체적인 근거를 제안합니다. [선택]을 누르면 피드백에 반영됩니다.</p>
+                            <p class="fb-desc">입력하신 키워드와 구성원의 데이터를 바탕으로 AI가 구체적인 근거를 제안합니다. [선택]을 누르면 피드백에 반영됩니다.</p>
                             
                             <div class="evidence-grid">
                                 <!-- 강점 근거 -->
@@ -650,12 +654,9 @@
         }
 
         function calculateGrade(score) {
-            if (score >= 95) return 'S'; 
-            if (score >= 90) return 'A+';
-            if (score >= 85) return 'A'; 
-            if (score >= 80) return 'B+';
-            if (score >= 70) return 'B'; 
-            return 'C';
+            if (score >= 95) return 'S'; if (score >= 90) return 'A+';
+            if (score >= 85) return 'A'; if (score >= 80) return 'B+';
+            if (score >= 70) return 'B'; return 'C';
         }
 
         function selectMember(name) {
@@ -674,57 +675,26 @@
             document.getElementById('p-name').innerText = full;
             document.getElementById('p-job').innerText = d.job;
             document.getElementById('p-keywords').innerHTML = d.keywords.map(k => `<span class="keyword">${k}</span>`).join('');
-            document.getElementById('p-info-list').innerHTML = `
-                <div class="info-item"><span class="info-label">경력</span><span class="info-value">${d.years}</span></div>
-                <div class="info-item"><span class="info-label">입사</span><span class="info-value">${d.joinDate}</span></div>
-                <div class="info-item"><span class="info-label">전년평가</span><span class="info-value">${d.eval}</span></div>
-            `;
-            document.getElementById('p-skills').innerHTML = d.skills.map(s => `
-                <div class="skill-row">
-                    <div class="skill-meta"><span>${s.name}</span><span>${s.per}%</span></div>
-                    <div class="progress-track"><div class="progress-fill" style="width:${s.per}%; background:${s.color}"></div>
-                </div>
-            `).join('');
+            document.getElementById('p-info-list').innerHTML = `<div class="info-item"><span class="info-label">경력</span><span class="info-value">${d.years}</span></div><div class="info-item"><span class="info-label">입사</span><span class="info-value">${d.joinDate}</span></div><div class="info-item"><span class="info-label">전년평가</span><span class="info-value">${d.eval}</span></div>`;
+            document.getElementById('p-skills').innerHTML = d.skills.map(s => `<div class="skill-row"><div class="skill-meta"><span>${s.name}</span><span>${s.per}%</span></div><div class="progress-track"><div class="progress-fill" style="width:${s.per}%; background:${s.color}"></div></div></div>`).join('');
             document.getElementById('p-strengths').innerHTML = d.strengths.map(s => `<div class="swot-item">${s}</div>`).join('');
             document.getElementById('p-weaknesses').innerHTML = d.weaknesses.map(s => `<div class="swot-item">${s}</div>`).join('');
-
             document.getElementById('growth-path').setAttribute('d', d.growthPath);
             document.getElementById('growth-desc').innerText = d.growthDesc;
             const pointsGroup = document.getElementById('growth-points');
             pointsGroup.innerHTML = '';
             d.growthPoints.forEach(pt => {
                 const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-                circle.setAttribute("cx", pt.x); 
-                circle.setAttribute("cy", pt.y); 
-                circle.setAttribute("r", "4"); 
-                circle.setAttribute("fill", "#fff"); 
-                circle.setAttribute("stroke", "var(--color-purple)"); 
-                circle.setAttribute("stroke-width", "2");
+                circle.setAttribute("cx", pt.x); circle.setAttribute("cy", pt.y); circle.setAttribute("r", "4"); circle.setAttribute("fill", "#fff"); circle.setAttribute("stroke", "var(--color-purple)"); circle.setAttribute("stroke-width", "2");
                 pointsGroup.appendChild(circle);
             });
-            document.getElementById('p-history').innerHTML = d.history.map(h => `
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-date">${h.date}</div>
-                    <div class="timeline-content">${h.title}</div>
-                    <div class="timeline-sub">${h.desc}</div>
-                </div>
-            `).join('');
+            document.getElementById('p-history').innerHTML = d.history.map(h => `<div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-date">${h.date}</div><div class="timeline-content">${h.title}</div><div class="timeline-sub">${h.desc}</div></div>`).join('');
 
             // --- TAB 2 ---
-            let cvSum = 0; 
-            let cvHtml = '';
+            let cvSum = 0; let cvHtml = '';
             d.coreValues.forEach(c => {
                 cvSum += c.score;
-                cvHtml += `
-                    <div class="cv-item">
-                        <div class="cv-header">
-                            <span class="cv-name">${c.name}</span>
-                            <span class="cv-val">${c.score}</span>
-                        </div>
-                        <div class="cv-bar-bg"><div class="cv-bar-fill" style="width:${c.score}%;"></div></div>
-                    </div>
-                `;
+                cvHtml += `<div class="cv-item"><div class="cv-header"><span class="cv-name">${c.name}</span><span class="cv-val">${c.score}</span></div><div class="cv-bar-bg"><div class="cv-bar-fill" style="width:${c.score}%;"></div></div></div>`;
             });
             const cvAvg = Math.round(cvSum / 5);
             document.getElementById('cv-list').innerHTML = cvHtml;
@@ -732,12 +702,8 @@
 
             const donutFg = document.getElementById('kpi-donut');
             const offset = 377 - (377 * d.kpiTotal / 100);
-            donutFg.style.transition = 'none'; 
-            donutFg.style.strokeDashoffset = 377;
-            setTimeout(() => { 
-                donutFg.style.transition = 'stroke-dashoffset 1s ease-out'; 
-                donutFg.style.strokeDashoffset = offset; 
-            }, 50);
+            donutFg.style.transition = 'none'; donutFg.style.strokeDashoffset = 377;
+            setTimeout(() => { donutFg.style.transition = 'stroke-dashoffset 1s ease-out'; donutFg.style.strokeDashoffset = offset; }, 50);
             document.getElementById('kpi-total').innerText = d.kpiTotal + '%';
             document.getElementById('kpi-desc-text').innerText = d.kpiDesc;
 
@@ -765,8 +731,17 @@
             document.getElementById('tab-' + id).classList.add('active');
         }
 
-        /* ================= FEEDBACK LOGIC ================= */
+        /* ================= FEEDBACK LOGIC (AI & Context Aware) ================= */
         
+        // 키워드 사전 (간단 매핑)
+        const keywordMap = {
+            '분석': ['데이터 분석 역량', '정확한 수치 기반 보고', '객관적 사실 검증'],
+            '소통': ['유관부서 협업', '적극적인 커뮤니케이션', '명확한 의사 전달'],
+            '열정': ['업무에 대한 몰입도', '새로운 과제 도전', '끈기 있는 태도'],
+            '리더십': ['팀원 동기부여', '프로젝트 리딩', '솔선수범'],
+            '혁신': ['기존 방식 개선', '새로운 아이디어 제안', '창의적 문제해결']
+        };
+
         function resetFeedbackTab() {
             document.getElementById('input-str').value = '';
             document.getElementById('input-imp').value = '';
@@ -782,71 +757,47 @@
             });
         }
 
-        // 현재 선택한 팀원 데이터 가져오기
-        function getCurrentMemberData() {
-            if (!currentMemberKey) return null;
-            return teamDB[currentMemberKey];
-        }
+        function getContextEvidence(inputText, type) {
+            const member = teamDB[currentMemberKey];
+            if (!member) return "데이터를 불러올 수 없습니다.";
 
-        // 입력 문장을 간단히 강조용 키워드로 감싸기
-        function extractKeyword(text) {
-            if (!text) return '';
-            return `‘${text}’`;  // 전체 문장을 감싸도 일단 OK (나중에 키워드 파싱해도 됨)
-        }
+            // 1. 입력 텍스트에서 키워드 감지
+            let foundKey = Object.keys(keywordMap).find(k => inputText.includes(k));
+            
+            // 2. 키워드 매칭되면 관련 문장 생성 (더미 AI)
+            if (foundKey) {
+                const suffix = type === 'str' ? "탁월합니다." : "보완이 필요합니다.";
+                return `입력하신 '${foundKey}' 관련하여, 실제 성과 데이터에서도 ${keywordMap[foundKey][0]} 측면이 ${suffix} (관련 성과: ${member.kpiDesc})`;
+            }
 
-        // coreValues 중 최고점 항목
-        function getTopCoreValue(member) {
-            if (!member || !member.coreValues || member.coreValues.length === 0) return null;
-            return member.coreValues.reduce((best, cur) => cur.score > best.score ? cur : best, member.coreValues[0]);
-        }
-
-        // coreValues 중 최저점 항목 (보완용)
-        function getLowCoreValue(member) {
-            if (!member || !member.coreValues || member.coreValues.length === 0) return null;
-            return member.coreValues.reduce((worst, cur) => cur.score < worst.score ? cur : worst, member.coreValues[0]);
-        }
-
-        // type: 'str' | 'imp' | 'gro' 에 따라 "입력 문장 + 팀원 데이터" 기반 근거 생성
-        function buildEvidence(type) {
-            const member = getCurrentMemberData();
-            if (!member) return '';
-
-            const strInput = document.getElementById('input-str').value.trim();
-            const impInput = document.getElementById('input-imp').value.trim();
-            const groInput = document.getElementById('input-gro').value.trim();
-
-            const topCV = getTopCoreValue(member);
-            const lowCV = getLowCoreValue(member);
-            const kpi = member.kpiTotal;
-            const kpiDesc = member.kpiDesc;
-            const growthDesc = member.growthDesc;
-
+            // 3. 매칭 안되면 일반적인 데이터 기반 문장 생성 (랜덤성)
+            const randomPick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+            
             if (type === 'str') {
-                const key = extractKeyword(strInput || '이 강점');
-                const cvName = topCV ? topCV.name : '핵심가치';
-                const cvScore = topCV ? topCV.score : '';
-                return `${key}라는 강점은 올해 성과 데이터에서도 확인됩니다. ${kpiDesc} (KPI ${kpi}점)뿐 아니라, '${cvName}' 가치 항목에서도 높은 점수(${cvScore}점)를 기록하며 이 강점이 실제 결과로 이어지고 있습니다.`;
+                return randomPick([
+                    `상위 5%에 해당하는 '${member.coreValues[0].name}' 점수(${member.coreValues[0].score}점)가 이를 뒷받침합니다.`,
+                    `올해 달성한 '${member.kpiDesc}' 성과와도 직접적으로 연결되는 강점입니다.`,
+                    `동료 평가에서도 이 부분이 구성원의 가장 큰 장점으로 언급되고 있습니다.`
+                ]);
+            } else if (type === 'imp') {
+                // 점수 낮은 항목 찾기
+                const lowCV = member.coreValues.reduce((min, cur) => cur.score < min.score ? cur : min);
+                return randomPick([
+                    `핵심가치 중 '${lowCV.name}' 항목의 점수가 ${lowCV.score}점으로, 개선의 여지가 데이터로 나타나고 있습니다.`,
+                    `이 부분만 보완된다면 차기 '${member.goalRole}' 역할 수행에 큰 도움이 될 것입니다.`,
+                    `업무 달성도에 비해 정성적 평가 항목에서 다소 아쉬운 지표가 확인됩니다.`
+                ]);
+            } else { // gro
+                return randomPick([
+                    `향후 '${member.goalRole}'로 성장하기 위해 꼭 필요한 역량입니다.`,
+                    `현재 설정한 '${member.compGoals[0]}' 목표 달성을 통해 이 역량을 강화할 수 있습니다.`,
+                    `장기적으로 조직의 '${member.bizGoals[0]}' 목표 달성에 기여할 수 있는 방향입니다.`
+                ]);
             }
-
-            if (type === 'imp') {
-                const key = extractKeyword(impInput || '이 보완점');
-                const cvName = lowCV ? lowCV.name : '핵심가치';
-                const cvScore = lowCV ? lowCV.score : '';
-                return `${key} 부분은 데이터 상으로도 개선 여지가 보이는 영역입니다. 특히 '${cvName}' 가치 점수가 다른 항목 대비 낮은 편(${cvScore}점)으로 나타나, 이 방향으로 작은 행동 변화를 시도해 보면 좋겠습니다.`;
-            }
-
-            if (type === 'gro') {
-                const key = extractKeyword(groInput || '이 성장 방향');
-                const goalRole = member.goalRole || '향후 역할';
-                return `${key}는 현재 설정된 커리어 목표인 '${goalRole}'과 직접 연결되는 방향입니다. ${growthDesc} 라는 성장 흐름을 이어가기 위해, 해당 역할과 관련된 프로젝트 경험을 의도적으로 늘려 가면 좋겠습니다.`;
-            }
-
-            return '';
         }
 
         function initAiEvidenceSection() {
             if(!currentMemberKey) return;
-            // 최초 생성 시, 입력 + 팀원 데이터 기반으로 근거 생성
             regenerateEvidence('str');
             regenerateEvidence('imp');
             regenerateEvidence('gro');
@@ -855,14 +806,16 @@
         }
 
         function regenerateEvidence(type) {
-            const text = buildEvidence(type);
+            const inputId = 'input-' + type;
+            const inputText = document.getElementById(inputId).value;
+            const text = getContextEvidence(inputText, type);
+            
             document.getElementById('evidence-' + type + '-text').innerText = text;
             
-            // 재생성 시 해당 근거 선택 초기화
+            // 초기화
             selectedEvidence[type] = '';
             document.getElementById('box-' + type).classList.remove('selected');
             document.getElementById('btn-sel-' + type).innerText = '선택';
-            
             generateFinalFeedback(); 
         }
 
@@ -896,42 +849,57 @@
             const impInput = document.getElementById('input-imp').value.trim();
             const groInput = document.getElementById('input-gro').value.trim();
 
-            if(!strInput && !impInput && !groInput && !selectedEvidence.str && !selectedEvidence.imp && !selectedEvidence.gro) {
+            if(!strInput && !impInput && !groInput) {
                 document.getElementById('final-feedback-text').value = '';
                 return;
             }
 
-            let partStr = strInput ? strInput : "";
-            let partImp = impInput ? impInput : "";
-            let partGro = groInput ? groInput : "";
+            // 5문장 문단 구성 로직
+            let sentences = [];
 
-            if(selectedEvidence.str) partStr += (partStr ? " " : "") + selectedEvidence.str;
-            if(selectedEvidence.imp) partImp += (partImp ? " " : "") + selectedEvidence.imp;
-            if(selectedEvidence.gro) partGro += (partGro ? " " : "") + selectedEvidence.gro;
-
-            let finalParagraph = "";
-
+            // 1. 오프닝 (톤에 따라)
             if (toneProfile.directness === 'direct') {
-                const p1 = partStr ? `올해 성과를 돌아보면, ${partStr}` : "";
-                const p2 = partImp ? `다만 아쉬운 점은 ${partImp}` : "";
-                const p3 = partGro ? `따라서 내년에는 ${partGro}` : "";
-                finalParagraph = [p1, p2, p3].filter(Boolean).join("\n\n");
+                sentences.push(`올해 성과에 대한 피드백을 전달합니다.`);
             } else {
-                const p1 = partStr ? `먼저 칭찬하고 싶은 점은, ${partStr} 라는 점입니다.` : "";
-                const p2 = partImp ? `조금 더 발전했으면 하는 부분도 있는데요, ${partImp} 이 부분을 신경 써주면 좋겠습니다.` : "";
-                const p3 = partGro ? `앞으로는 ${partGro} 방향으로 함께 성장해 나갑시다.` : "";
-                finalParagraph = [p1, p2, p3].filter(Boolean).join(" ");
+                sentences.push(`올 한 해, 팀을 위해 헌신해 주셔서 정말 고맙습니다.`);
             }
 
+            // 2. 강점 (입력 + 근거)
+            if (strInput) {
+                let s = `먼저, ${strInput}`; 
+                if (selectedEvidence.str) s += ` 실제로 ${selectedEvidence.str}`;
+                sentences.push(s);
+            }
+
+            // 3. 전환 (Tone)
+            if (impInput) {
+                if (toneProfile.directness === 'direct') sentences.push(`다만, 개선이 필요한 부분도 확인됩니다.`);
+                else sentences.push(`더 훌륭한 전문가로 성장하기 위해, 조금 아쉬운 부분도 이야기하고 싶습니다.`);
+                
+                // 4. 보완 (입력 + 근거)
+                let i = `${impInput}`;
+                if (selectedEvidence.imp) i += ` ${selectedEvidence.imp}`;
+                sentences.push(i);
+            }
+
+            // 5. 성장 (입력 + 근거)
+            if (groInput) {
+                let g = `앞으로는 ${groInput}`;
+                if (selectedEvidence.gro) g += ` ${selectedEvidence.gro}`;
+                sentences.push(g);
+            }
+
+            // 6. 클로징 (과업/관계)
             if (toneProfile.focus === 'task') {
-                finalParagraph += "\n\n구체적인 실행 계획을 다음 미팅 때 논의합시다.";
+                sentences.push(`위 내용에 대한 구체적인 실행 계획(Action Plan)을 세워 다음 미팅 때 논의합시다.`);
             } else {
-                finalParagraph += "\n\n언제든 힘든 점이 있다면 편하게 이야기해주세요. 항상 응원합니다.";
+                sentences.push(`언제든 도움이 필요하면 편하게 말해주세요. ${teamDB[currentMemberKey].job}로서의 멋진 성장을 항상 응원합니다.`);
             }
 
-            document.getElementById('final-feedback-text').value = finalParagraph;
+            // 문단 합치기
+            document.getElementById('final-feedback-text').value = sentences.join(" ");
         }
+
     </script>
 </body>
 </html>
-```
