@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -222,7 +223,6 @@
             background: #fbfbfb; border: 1px solid #eee; border-radius: 12px; padding: 16px; 
             position: relative; transition: all 0.2s;
         }
-        /* 선택된 근거 스타일 */
         .evidence-box.selected {
             background: #f4eff9; border-color: var(--color-purple); box-shadow: 0 4px 10px rgba(85,29,131,0.1);
         }
@@ -262,7 +262,6 @@
         .tab-content { display: none; animation: fadeIn 0.3s ease-out; }
         .tab-content.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
     </style>
 </head>
 <body>
@@ -445,7 +444,7 @@
                             <div class="fb-input-grid">
                                 <div class="fb-input-card">
                                     <div class="fb-input-head" style="color:var(--color-magenta)">🔥 강점 (Strength)</div>
-                                    <textarea id="input-str" class="fb-textarea" placeholder="예: 데이터 분석 결과의 정확도가 매우 높습니다."></textarea>
+                                    <textarea id="input-str" class="fb-textarea" placeholder="예: 분석적이라는 강점 덕분에 데이터 기반 의사결정에 큰 도움이 되고 있습니다."></textarea>
                                 </div>
                                 <div class="fb-input-card">
                                     <div class="fb-input-head" style="color:var(--color-teal)">💡 보완점 (Improvement)</div>
@@ -651,9 +650,12 @@
         }
 
         function calculateGrade(score) {
-            if (score >= 95) return 'S'; if (score >= 90) return 'A+';
-            if (score >= 85) return 'A'; if (score >= 80) return 'B+';
-            if (score >= 70) return 'B'; return 'C';
+            if (score >= 95) return 'S'; 
+            if (score >= 90) return 'A+';
+            if (score >= 85) return 'A'; 
+            if (score >= 80) return 'B+';
+            if (score >= 70) return 'B'; 
+            return 'C';
         }
 
         function selectMember(name) {
@@ -672,26 +674,57 @@
             document.getElementById('p-name').innerText = full;
             document.getElementById('p-job').innerText = d.job;
             document.getElementById('p-keywords').innerHTML = d.keywords.map(k => `<span class="keyword">${k}</span>`).join('');
-            document.getElementById('p-info-list').innerHTML = `<div class="info-item"><span class="info-label">경력</span><span class="info-value">${d.years}</span></div><div class="info-item"><span class="info-label">입사</span><span class="info-value">${d.joinDate}</span></div><div class="info-item"><span class="info-label">전년평가</span><span class="info-value">${d.eval}</span></div>`;
-            document.getElementById('p-skills').innerHTML = d.skills.map(s => `<div class="skill-row"><div class="skill-meta"><span>${s.name}</span><span>${s.per}%</span></div><div class="progress-track"><div class="progress-fill" style="width:${s.per}%; background:${s.color}"></div></div></div>`).join('');
+            document.getElementById('p-info-list').innerHTML = `
+                <div class="info-item"><span class="info-label">경력</span><span class="info-value">${d.years}</span></div>
+                <div class="info-item"><span class="info-label">입사</span><span class="info-value">${d.joinDate}</span></div>
+                <div class="info-item"><span class="info-label">전년평가</span><span class="info-value">${d.eval}</span></div>
+            `;
+            document.getElementById('p-skills').innerHTML = d.skills.map(s => `
+                <div class="skill-row">
+                    <div class="skill-meta"><span>${s.name}</span><span>${s.per}%</span></div>
+                    <div class="progress-track"><div class="progress-fill" style="width:${s.per}%; background:${s.color}"></div>
+                </div>
+            `).join('');
             document.getElementById('p-strengths').innerHTML = d.strengths.map(s => `<div class="swot-item">${s}</div>`).join('');
             document.getElementById('p-weaknesses').innerHTML = d.weaknesses.map(s => `<div class="swot-item">${s}</div>`).join('');
+
             document.getElementById('growth-path').setAttribute('d', d.growthPath);
             document.getElementById('growth-desc').innerText = d.growthDesc;
             const pointsGroup = document.getElementById('growth-points');
             pointsGroup.innerHTML = '';
             d.growthPoints.forEach(pt => {
                 const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-                circle.setAttribute("cx", pt.x); circle.setAttribute("cy", pt.y); circle.setAttribute("r", "4"); circle.setAttribute("fill", "#fff"); circle.setAttribute("stroke", "var(--color-purple)"); circle.setAttribute("stroke-width", "2");
+                circle.setAttribute("cx", pt.x); 
+                circle.setAttribute("cy", pt.y); 
+                circle.setAttribute("r", "4"); 
+                circle.setAttribute("fill", "#fff"); 
+                circle.setAttribute("stroke", "var(--color-purple)"); 
+                circle.setAttribute("stroke-width", "2");
                 pointsGroup.appendChild(circle);
             });
-            document.getElementById('p-history').innerHTML = d.history.map(h => `<div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-date">${h.date}</div><div class="timeline-content">${h.title}</div><div class="timeline-sub">${h.desc}</div></div>`).join('');
+            document.getElementById('p-history').innerHTML = d.history.map(h => `
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">${h.date}</div>
+                    <div class="timeline-content">${h.title}</div>
+                    <div class="timeline-sub">${h.desc}</div>
+                </div>
+            `).join('');
 
             // --- TAB 2 ---
-            let cvSum = 0; let cvHtml = '';
+            let cvSum = 0; 
+            let cvHtml = '';
             d.coreValues.forEach(c => {
                 cvSum += c.score;
-                cvHtml += `<div class="cv-item"><div class="cv-header"><span class="cv-name">${c.name}</span><span class="cv-val">${c.score}</span></div><div class="cv-bar-bg"><div class="cv-bar-fill" style="width:${c.score}%;"></div></div></div>`;
+                cvHtml += `
+                    <div class="cv-item">
+                        <div class="cv-header">
+                            <span class="cv-name">${c.name}</span>
+                            <span class="cv-val">${c.score}</span>
+                        </div>
+                        <div class="cv-bar-bg"><div class="cv-bar-fill" style="width:${c.score}%;"></div></div>
+                    </div>
+                `;
             });
             const cvAvg = Math.round(cvSum / 5);
             document.getElementById('cv-list').innerHTML = cvHtml;
@@ -699,8 +732,12 @@
 
             const donutFg = document.getElementById('kpi-donut');
             const offset = 377 - (377 * d.kpiTotal / 100);
-            donutFg.style.transition = 'none'; donutFg.style.strokeDashoffset = 377;
-            setTimeout(() => { donutFg.style.transition = 'stroke-dashoffset 1s ease-out'; donutFg.style.strokeDashoffset = offset; }, 50);
+            donutFg.style.transition = 'none'; 
+            donutFg.style.strokeDashoffset = 377;
+            setTimeout(() => { 
+                donutFg.style.transition = 'stroke-dashoffset 1s ease-out'; 
+                donutFg.style.strokeDashoffset = offset; 
+            }, 50);
             document.getElementById('kpi-total').innerText = d.kpiTotal + '%';
             document.getElementById('kpi-desc-text').innerText = d.kpiDesc;
 
@@ -738,7 +775,6 @@
             document.getElementById('final-feedback-text').value = '';
             
             selectedEvidence = { str: '', imp: '', gro: '' };
-            // 근거 박스 초기화
             ['str', 'imp', 'gro'].forEach(key => {
                 document.getElementById('evidence-' + key + '-text').innerText = '';
                 document.getElementById('box-' + key).classList.remove('selected');
@@ -746,28 +782,71 @@
             });
         }
 
-        // 근거 풀 (더미 데이터)
-        const evidencePool = {
-            str: [
-                "최근 프로젝트에서 데이터 기반으로 95%의 예측 정확도를 달성한 점이 이를 뒷받침합니다.",
-                "핵심가치 중 '도전/혁신' 항목에서 팀 내 최고 수준의 평가를 받은 것이 증거입니다.",
-                "상반기 KPI 달성률이 100%를 초과한 점은 탁월한 업무 역량을 보여줍니다."
-            ],
-            imp: [
-                "다만, '협업/소통' 가치 점수가 타 항목 대비 다소 낮아 보완이 필요해 보입니다.",
-                "일정 관리 측면에서 마감 기한을 준수하는 빈도를 높일 필요가 있다는 데이터가 있습니다.",
-                "문서화 작업의 완성도를 높인다면, 협업 효율이 더욱 개선될 것입니다."
-            ],
-            gro: [
-                "향후 'Tech Lead'로 성장하기 위해 아키텍처 설계 역량을 보강하는 것이 좋겠습니다.",
-                "현재 설정한 'PMP 자격 취득' 목표는 리더십 역량 강화에 큰 도움이 될 것입니다.",
-                "비즈니스 관점의 이해도를 높인다면, 더 큰 프로젝트를 주도할 수 있을 것입니다."
-            ]
-        };
+        // 현재 선택한 팀원 데이터 가져오기
+        function getCurrentMemberData() {
+            if (!currentMemberKey) return null;
+            return teamDB[currentMemberKey];
+        }
+
+        // 입력 문장을 간단히 강조용 키워드로 감싸기
+        function extractKeyword(text) {
+            if (!text) return '';
+            return `‘${text}’`;  // 전체 문장을 감싸도 일단 OK (나중에 키워드 파싱해도 됨)
+        }
+
+        // coreValues 중 최고점 항목
+        function getTopCoreValue(member) {
+            if (!member || !member.coreValues || member.coreValues.length === 0) return null;
+            return member.coreValues.reduce((best, cur) => cur.score > best.score ? cur : best, member.coreValues[0]);
+        }
+
+        // coreValues 중 최저점 항목 (보완용)
+        function getLowCoreValue(member) {
+            if (!member || !member.coreValues || member.coreValues.length === 0) return null;
+            return member.coreValues.reduce((worst, cur) => cur.score < worst.score ? cur : worst, member.coreValues[0]);
+        }
+
+        // type: 'str' | 'imp' | 'gro' 에 따라 "입력 문장 + 팀원 데이터" 기반 근거 생성
+        function buildEvidence(type) {
+            const member = getCurrentMemberData();
+            if (!member) return '';
+
+            const strInput = document.getElementById('input-str').value.trim();
+            const impInput = document.getElementById('input-imp').value.trim();
+            const groInput = document.getElementById('input-gro').value.trim();
+
+            const topCV = getTopCoreValue(member);
+            const lowCV = getLowCoreValue(member);
+            const kpi = member.kpiTotal;
+            const kpiDesc = member.kpiDesc;
+            const growthDesc = member.growthDesc;
+
+            if (type === 'str') {
+                const key = extractKeyword(strInput || '이 강점');
+                const cvName = topCV ? topCV.name : '핵심가치';
+                const cvScore = topCV ? topCV.score : '';
+                return `${key}라는 강점은 올해 성과 데이터에서도 확인됩니다. ${kpiDesc} (KPI ${kpi}점)뿐 아니라, '${cvName}' 가치 항목에서도 높은 점수(${cvScore}점)를 기록하며 이 강점이 실제 결과로 이어지고 있습니다.`;
+            }
+
+            if (type === 'imp') {
+                const key = extractKeyword(impInput || '이 보완점');
+                const cvName = lowCV ? lowCV.name : '핵심가치';
+                const cvScore = lowCV ? lowCV.score : '';
+                return `${key} 부분은 데이터 상으로도 개선 여지가 보이는 영역입니다. 특히 '${cvName}' 가치 점수가 다른 항목 대비 낮은 편(${cvScore}점)으로 나타나, 이 방향으로 작은 행동 변화를 시도해 보면 좋겠습니다.`;
+            }
+
+            if (type === 'gro') {
+                const key = extractKeyword(groInput || '이 성장 방향');
+                const goalRole = member.goalRole || '향후 역할';
+                return `${key}는 현재 설정된 커리어 목표인 '${goalRole}'과 직접 연결되는 방향입니다. ${growthDesc} 라는 성장 흐름을 이어가기 위해, 해당 역할과 관련된 프로젝트 경험을 의도적으로 늘려 가면 좋겠습니다.`;
+            }
+
+            return '';
+        }
 
         function initAiEvidenceSection() {
             if(!currentMemberKey) return;
-            // 최초 생성
+            // 최초 생성 시, 입력 + 팀원 데이터 기반으로 근거 생성
             regenerateEvidence('str');
             regenerateEvidence('imp');
             regenerateEvidence('gro');
@@ -776,16 +855,14 @@
         }
 
         function regenerateEvidence(type) {
-            const arr = evidencePool[type];
-            const rand = arr[Math.floor(Math.random() * arr.length)];
-            document.getElementById('evidence-' + type + '-text').innerText = rand;
+            const text = buildEvidence(type);
+            document.getElementById('evidence-' + type + '-text').innerText = text;
             
-            // 재생성 시 선택 해제
+            // 재생성 시 해당 근거 선택 초기화
             selectedEvidence[type] = '';
             document.getElementById('box-' + type).classList.remove('selected');
             document.getElementById('btn-sel-' + type).innerText = '선택';
             
-            // 자동 생성 호출
             generateFinalFeedback(); 
         }
 
@@ -795,17 +872,14 @@
             const text = document.getElementById('evidence-' + type + '-text').innerText;
 
             if (selectedEvidence[type]) {
-                // 이미 선택됨 -> 해제
                 selectedEvidence[type] = '';
                 box.classList.remove('selected');
                 btn.innerText = '선택';
             } else {
-                // 선택
                 selectedEvidence[type] = text;
                 box.classList.add('selected');
                 btn.innerText = '선택 취소';
             }
-            // 선택 변경 시 최종 피드백 자동 업데이트
             generateFinalFeedback();
         }
 
@@ -814,8 +888,6 @@
             const parent = element.parentElement;
             Array.from(parent.children).forEach(child => child.classList.remove('selected'));
             element.classList.add('selected');
-            
-            // 톤 변경 시 자동 업데이트 (Requirement 3)
             generateFinalFeedback();
         }
 
@@ -824,40 +896,33 @@
             const impInput = document.getElementById('input-imp').value.trim();
             const groInput = document.getElementById('input-gro').value.trim();
 
-            if(!strInput && !impInput && !groInput) {
-                // 입력 없으면 빈 상태
+            if(!strInput && !impInput && !groInput && !selectedEvidence.str && !selectedEvidence.imp && !selectedEvidence.gro) {
                 document.getElementById('final-feedback-text').value = '';
                 return;
             }
 
-            // 문장 구성
             let partStr = strInput ? strInput : "";
             let partImp = impInput ? impInput : "";
             let partGro = groInput ? groInput : "";
 
-            // 근거 추가 (선택된 경우에만)
-            if(selectedEvidence.str) partStr += " " + selectedEvidence.str;
-            if(selectedEvidence.imp) partImp += " " + selectedEvidence.imp;
-            if(selectedEvidence.gro) partGro += " " + selectedEvidence.gro;
+            if(selectedEvidence.str) partStr += (partStr ? " " : "") + selectedEvidence.str;
+            if(selectedEvidence.imp) partImp += (partImp ? " " : "") + selectedEvidence.imp;
+            if(selectedEvidence.gro) partGro += (partGro ? " " : "") + selectedEvidence.gro;
 
-            // 톤에 따른 접속사/서술어 처리 (간단 로직)
             let finalParagraph = "";
 
             if (toneProfile.directness === 'direct') {
-                // 직설적: 명확한 인과관계, 짧은 호흡
                 const p1 = partStr ? `올해 성과를 돌아보면, ${partStr}` : "";
                 const p2 = partImp ? `다만 아쉬운 점은 ${partImp}` : "";
                 const p3 = partGro ? `따라서 내년에는 ${partGro}` : "";
                 finalParagraph = [p1, p2, p3].filter(Boolean).join("\n\n");
             } else {
-                // 완곡함: 부드러운 연결, 쿠션어
                 const p1 = partStr ? `먼저 칭찬하고 싶은 점은, ${partStr} 라는 점입니다.` : "";
                 const p2 = partImp ? `조금 더 발전했으면 하는 부분도 있는데요, ${partImp} 이 부분을 신경 써주면 좋겠습니다.` : "";
                 const p3 = partGro ? `앞으로는 ${partGro} 방향으로 함께 성장해 나갑시다.` : "";
                 finalParagraph = [p1, p2, p3].filter(Boolean).join(" ");
             }
 
-            // 과업 vs 관계 (마무리 멘트)
             if (toneProfile.focus === 'task') {
                 finalParagraph += "\n\n구체적인 실행 계획을 다음 미팅 때 논의합시다.";
             } else {
@@ -866,7 +931,7 @@
 
             document.getElementById('final-feedback-text').value = finalParagraph;
         }
-
     </script>
 </body>
 </html>
+```
