@@ -9,15 +9,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 
     <style>
-        /* [디자인 시스템] */
+        /* [디자인 시스템 변수] */
         :root {
             --color-magenta: #D7177B;
             --color-purple: #551D83;
             --color-lightblue: #70C0E6;
             --color-teal: #008785;
             --color-bg-gray: #F5F5F5;
-            --sidebar-width: 260px;
+            --color-card-bg: #FFFFFF;
+            --header-gradient: linear-gradient(90deg, var(--color-purple) 0%, var(--color-magenta) 100%);
             --header-height: 64px;
+            --sidebar-width: 260px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -27,20 +29,17 @@
             background-color: var(--color-bg-gray);
             color: #333;
             height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
+            display: flex; flex-direction: column; overflow: hidden;
         }
 
         /* 1. 헤더 */
         header {
-            background: linear-gradient(90deg, var(--color-purple) 0%, var(--color-magenta) 100%);
+            background: var(--header-gradient);
             color: #fff;
             padding: 0 32px;
             height: var(--header-height);
             display: flex; align-items: center; justify-content: space-between;
-            flex-shrink: 0;
-            z-index: 100;
+            flex-shrink: 0; z-index: 100;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
@@ -48,11 +47,10 @@
         
         .search-box {
             background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4);
-            border-radius: 20px; padding: 8px 20px; color: #fff; outline: none; width: 280px; font-size: 14px;
-            transition: background 0.2s;
+            border-radius: 20px; padding: 8px 20px; color: #fff; outline: none; width: 280px; font-size: 14px; transition: 0.2s;
         }
-        .search-box:focus { background: rgba(255,255,255,0.3); border-color: #fff; }
-        .search-box::placeholder { color: rgba(255,255,255,0.7); }
+        .search-box:focus { background: rgba(255,255,255,0.35); width: 300px; }
+        .search-box::placeholder { color: rgba(255,255,255,0.8); }
 
         /* 2. 메인 컨테이너 */
         .app-container {
@@ -87,13 +85,22 @@
             overflow: hidden; display: flex; flex-direction: column;
         }
 
-        /* 초기화면 */
+        /* 초기화면 (Empty State) */
         .empty-state {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             color: #999; z-index: 10; background: var(--color-bg-gray);
         }
-        .empty-icon { font-size: 60px; margin-bottom: 20px; opacity: 0.5; }
+        .empty-content {
+            background: #fff; padding: 40px; border-radius: 20px; text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05); max-width: 500px; width: 90%;
+        }
+        .empty-icon { font-size: 60px; margin-bottom: 20px; opacity: 0.8; }
+        .empty-title { font-size: 22px; font-weight: 700; color: var(--color-purple); margin-bottom: 12px; }
+        .empty-desc { font-size: 14px; color: #666; line-height: 1.6; margin-bottom: 24px; word-break: keep-all; }
+        .feature-list { text-align: left; font-size: 13px; color: #555; background: #f9f9f9; padding: 20px; border-radius: 12px; }
+        .feature-list li { margin-bottom: 8px; list-style: none; position: relative; padding-left: 14px; }
+        .feature-list li::before { content: '•'; position: absolute; left: 0; color: var(--color-teal); }
 
         /* 메인 컨텐츠 */
         .main-content {
@@ -108,8 +115,9 @@
         .nav-tabs { display: flex; justify-content: center; gap: 60px; list-style: none; }
         .tab-link {
             display: block; padding: 16px 10px; color: #999;
-            text-decoration: none; font-size: 16px; font-weight: 500; cursor: pointer;
+            text-decoration: none; font-size: 16px; font-weight: 500; cursor: pointer; transition: 0.2s;
         }
+        .tab-link:hover { color: #555; }
         .tab-item.active .tab-link { color: var(--color-purple); font-weight: 700; border-bottom: 3px solid var(--color-purple); }
 
         .tab-content-area { padding: 40px; max-width: 1200px; width: 100%; margin: 0 auto; }
@@ -123,6 +131,7 @@
         .card-head { 
             font-size: 17px; font-weight: 700; color: #333; margin-bottom: 20px; 
             padding-bottom: 12px; border-bottom: 1px solid #f5f5f5; 
+            display: flex; justify-content: space-between; align-items: center;
         }
 
         /* 그리드 */
@@ -149,7 +158,7 @@
         .progress-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
 
         .swot-item { font-size: 12px; padding: 8px; border-radius: 6px; background: #fcfcfc; border: 1px solid #eee; margin-bottom: 6px;}
-        .timeline { position: relative; padding-left: 16px; max-height: 250px; overflow-y: auto;}
+        .timeline { position: relative; padding-left: 16px; }
         .timeline::before { content: ''; position: absolute; left: 5px; top: 6px; bottom: 0; width: 2px; background: #eee; }
         .timeline-item { position: relative; padding-bottom: 20px; padding-left: 16px; }
         .timeline-dot { position: absolute; left: -16px; top: 0; width: 10px; height: 10px; background: #fff; border: 3px solid var(--color-purple); border-radius: 50%; z-index: 1; }
@@ -158,20 +167,24 @@
         
         /* [TAB 2] 성과 & 육성 */
         .eval-summary-card {
-            background: #333; color: #fff; border-radius: 16px; padding: 24px;
+            background: #222; color: #fff; border-radius: 16px; padding: 24px 32px;
             display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            background: linear-gradient(135deg, #333 0%, #444 100%);
         }
-        .eval-info { display: flex; gap: 40px; }
-        .eval-item { display: flex; flex-direction: column; }
-        .eval-label { font-size: 12px; opacity: 0.7; margin-bottom: 4px; }
-        .eval-value { font-size: 24px; font-weight: 700; }
-        .eval-grade-box { text-align: right; }
-        .eval-grade { font-size: 36px; font-weight: 700; color: var(--color-magenta); line-height: 1; }
+        .eval-info { display: flex; gap: 40px; align-items: center; }
+        .eval-item { display: flex; flex-direction: column; min-width: 100px; }
+        .eval-label { font-size: 12px; opacity: 0.7; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .eval-value { font-size: 28px; font-weight: 700; }
+        .eval-sub { font-size: 13px; color: var(--color-teal); font-weight: 500; } /* 20% 표시용 */
+        .eval-sub.kpi { color: var(--color-magenta); } /* 80% 표시용 */
+        
+        .eval-grade-box { text-align: right; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 40px; }
+        .eval-grade { font-size: 42px; font-weight: 900; color: #fff; line-height: 1; text-shadow: 0 0 10px rgba(215, 23, 123, 0.5); }
 
         .cv-item { margin-bottom: 14px; font-size: 13px; }
         .cv-header { display: flex; justify-content: space-between; margin-bottom: 4px; }
-        .cv-name { font-weight: 500; }
+        .cv-name { font-weight: 500; color: #555; }
         .cv-val { font-weight: 700; color: var(--color-teal); }
         .cv-bar-bg { width: 100%; height: 6px; background: #eee; border-radius: 3px; overflow: hidden; }
         .cv-bar-fill { height: 100%; background: var(--color-teal); border-radius: 3px; }
@@ -184,7 +197,7 @@
             stroke-dasharray: 377; stroke-dashoffset: 377; transform: rotate(-90deg); transform-origin: 50% 50%; transition: stroke-dashoffset 1s ease-out;
         }
         .donut-val { font-size: 24px; font-weight: 700; color: var(--color-purple); position: absolute; top:50%; left:50%; transform:translate(-50%, -50%); }
-        .kpi-desc { font-size: 13px; color: #666; line-height: 1.6; }
+        .kpi-desc { font-size: 13px; color: #666; line-height: 1.6; flex: 1; }
 
         .section-title { font-size: 18px; font-weight: 700; color: #333; margin: 40px 0 20px; display: flex; align-items: center; gap: 8px;}
         .section-badge { background: var(--color-teal); color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 12px; }
@@ -210,8 +223,9 @@
 
     <!-- 1. 헤더 -->
     <header>
+        <!-- 로고 클릭 시 초기화 -->
         <a onclick="resetView()" class="logo-area">LG Chem</a>
-        <!-- 검색창에 ID 추가 -->
+        <!-- 검색창 -->
         <input type="text" id="member-search" class="search-box" placeholder="구성원 검색 (예: 박태희, 박재현)">
     </header>
 
@@ -230,25 +244,24 @@
             
             <!-- [초기 상태] Empty State -->
             <div id="empty-state" class="empty-state">
-                <div class="empty-icon">👥</div>
-                <h3>AI 기반 통합 인사이트 프로필</h3>
-                <p style="margin-top:8px; color:#777; font-size:14px; text-align:center;">
-                    이 도구는 리더가 구성원의 데이터를 한눈에 정리하고,<br>
-                    더 공정하고 설득력 있는 피드백을 준비할 수 있도록 설계되었습니다.
-                </p>
-
-                <div style="margin-top:24px; font-size:13px; color:#666; line-height:1.7; max-width:420px; text-align:left;">
-                    <strong>이 도구로 할 수 있는 일</strong>
-                    <ul style="list-style:none; padding:0; margin-top:8px;">
-                        <li>• 평가·성과·경력 정보를 한 화면에서 통합 확인</li>
-                        <li>• 등급 산출의 논리를 설명할 수 있는 핵심 근거 정리</li>
-                        <li>• 구성원의 강점·보완점·커리어 목표를 바탕으로 성장 관점 피드백 설계</li>
-                    </ul>
-                </div>
-
-                <div style="margin-top:20px; font-size:12px; color:#999; text-align:center;">
-                    왼쪽에서 팀원을 선택하면 프로필이 자동으로 불러옵니다.<br>
-                    이후 상단 탭에서 <strong>기본정보 → 성과 & 육성 → 전달</strong> 순서로 살펴보며 피드백을 준비해 보세요.
+                <div class="empty-content">
+                    <div class="empty-icon">👥</div>
+                    <div class="empty-title">AI 기반 통합 인사이트 프로필</div>
+                    <p class="empty-desc">
+                        이 도구는 리더가 구성원의 데이터를 한눈에 정리하고,<br>
+                        더 공정하고 설득력 있는 피드백을 준비할 수 있도록 설계되었습니다.
+                    </p>
+                    <div class="feature-list">
+                        <strong>이 도구로 할 수 있는 일</strong>
+                        <ul>
+                            <li>평가·성과·경력 정보를 한 화면에서 통합 확인</li>
+                            <li>등급 산출의 논리(80:20)를 설명할 수 있는 핵심 근거 정리</li>
+                            <li>강점·보완점·커리어 목표를 바탕으로 성장 관점 피드백 설계</li>
+                        </ul>
+                    </div>
+                    <div style="margin-top:20px; font-size:12px; color:#999;">
+                        👈 왼쪽 목록에서 팀원을 선택하여 시작하세요.
+                    </div>
                 </div>
             </div>
 
@@ -304,12 +317,11 @@
                                 <div class="card-head">성장 곡선</div>
                                 <div style="height:120px; display:flex; align-items:center; justify-content:center;">
                                     <svg width="200" height="100" viewBox="0 0 200 100">
-                                        <!-- Path를 동적으로 변경하기 위해 ID 부여 -->
                                         <path id="growth-path" d="" fill="none" stroke="var(--color-purple)" stroke-width="3" stroke-linecap="round"/>
                                         <g id="growth-points"></g>
                                     </svg>
                                 </div>
-                                <p id="growth-desc" style="text-align:center; font-size:12px; color:#888;"></p>
+                                <p id="growth-desc" style="text-align:center; font-size:12px; color:#888; margin-top:10px;"></p>
                             </div>
                             <!-- 이력 -->
                             <div class="card">
@@ -329,13 +341,14 @@
                                 <div class="eval-item">
                                     <span class="eval-label">업무달성도 (80%)</span>
                                     <span class="eval-value" id="sum-kpi">0점</span>
+                                    <span class="eval-sub kpi" id="calc-kpi">00</span>
                                 </div>
-                                <div style="font-size:24px; opacity:0.3;">+</div>
+                                <div style="font-size:24px; opacity:0.3; padding-top:10px;">+</div>
                                 <div class="eval-item">
                                     <span class="eval-label">핵심가치 (20%)</span>
                                     <span class="eval-value" id="sum-cv">0점</span>
+                                    <span class="eval-sub" id="calc-cv">00</span>
                                 </div>
-                                <div style="width:1px; background:#fff; opacity:0.2; margin:0 10px;"></div>
                                 <div class="eval-grade-box">
                                     <div class="eval-label">최종 등급</div>
                                     <div class="eval-grade" id="final-grade">S</div>
@@ -350,7 +363,7 @@
                                 <div class="kpi-wrapper">
                                     <div class="donut-chart">
                                         <svg width="120" height="120">
-                                            <circle class="donut-bg" cx="60" "cy="60" r="54"></circle>
+                                            <circle class="donut-bg" cx="60" cy="60" r="54"></circle>
                                             <circle class="donut-fg" id="kpi-donut" cx="60" cy="60" r="54"></circle>
                                         </svg>
                                         <div class="donut-val" id="kpi-total"></div>
@@ -363,7 +376,7 @@
                             </div>
                             <div class="card">
                                 <div class="card-head">
-                                    <span>핵심가치 준수도</span>
+                                    <span>핵심가치 5대 항목</span>
                                     <span style="font-size:12px; font-weight:400; color:#888;">종합 <strong id="cv-total-score" style="color:var(--color-teal)">0</strong> / 100</span>
                                 </div>
                                 <div id="cv-list" style="display:flex; flex-direction:column; justify-content:center; height:100%;"></div>
@@ -401,9 +414,13 @@
 
                     <!-- [TAB 3] 전달 -->
                     <div id="tab-feedback" class="tab-content">
-                        <div class="card" style="text-align:center; padding:100px;">
-                            <h3 style="color:#ccc;">피드백 작성 및 전달</h3>
-                            <p style="color:#999;">구성원에게 전달할 피드백을 작성하는 공간입니다.</p>
+                        <div class="card" style="text-align:center; padding:100px; justify-content: center; align-items: center;">
+                            <div style="font-size:48px; margin-bottom:20px; opacity:0.2;">💬</div>
+                            <h3 style="color:#555;">피드백 전달 및 면담</h3>
+                            <p style="color:#999; margin-top:10px;">
+                                앞선 성과와 육성 데이터를 바탕으로<br>
+                                구성원에게 전달할 핵심 메시지를 작성하는 공간입니다.
+                            </p>
                         </div>
                     </div>
 
@@ -413,7 +430,8 @@
     </div>
 
     <script>
-        // [데이터] 팀원별 고유 정보
+        // [데이터] 팀원별 정보 (MBTI 제거됨)
+        // 핵심가치 5대 항목: Collaboration, Passion, Agility, Customer Focus, Sustainability
         const teamDB = {
             '박태희': {
                 job: 'Data Scientist', avatar: '👩🏻‍💻', years: '5년 3개월', joinDate: '2019.01.05', eval: 'S',
@@ -433,7 +451,14 @@
                 ],
                 
                 kpiTotal: 92, kpiDesc: '전사 데이터 파이프라인 구축 및 모델 정확도 목표 초과 달성',
-                coreValues: [ { name: 'Customer Focus', score: 95 }, { name: 'Sustainability', score: 85 }, { name: 'Agility', score: 90 }, { name: 'Passion', score: 92 }, { name: 'Collaboration', score: 80 } ],
+                coreValues: [
+                    { name: 'Customer Focus', score: 95 },
+                    { name: 'Sustainability', score: 85 },
+                    { name: 'Agility', score: 90 },
+                    { name: 'Passion', score: 92 },
+                    { name: 'Collaboration', score: 80 }
+                ],
+                
                 currRole: 'Data Scientist', goalRole: 'Data Tech Lead',
                 compGoals: ['MLOps 구축 경험', 'AWS 자격 취득'], bizGoals: ['생성형 AI 챗봇', '공정 이상 탐지']
             },
@@ -443,7 +468,6 @@
                 skills: [ { name: 'Deep Learning', per: 95, color: 'var(--color-purple)' }, { name: 'Computer Vision', per: 80, color: 'var(--color-magenta)' } ],
                 strengths: ['연구 역량', '최적화'], weaknesses: ['비즈니스 관점', '문서화'],
                 
-                // 성장곡선 (꾸준한 우상향)
                 growthPath: "M10 70 Q 100 50, 190 20",
                 growthPoints: [{x:10,y:70}, {x:100,y:50}, {x:190,y:20}],
                 growthDesc: "입사 이래 꾸준히 높은 연구 성과를 유지하고 있습니다.",
@@ -455,7 +479,13 @@
                 ],
                 
                 kpiTotal: 88, kpiDesc: '신규 알고리즘 특허 2건 출원 및 학회 발표',
-                coreValues: [ { name: 'Customer Focus', score: 80 }, { name: 'Sustainability', score: 75 }, { name: 'Agility', score: 95 }, { name: 'Passion', score: 90 }, { name: 'Collaboration', score: 70 } ],
+                coreValues: [
+                    { name: 'Customer Focus', score: 80 },
+                    { name: 'Sustainability', score: 75 },
+                    { name: 'Agility', score: 95 },
+                    { name: 'Passion', score: 90 },
+                    { name: 'Collaboration', score: 70 }
+                ],
                 currRole: 'AI Researcher', goalRole: 'Principal Researcher',
                 compGoals: ['논문 구현', '학회 네트워킹'], bizGoals: ['비전 검사기 상용화', '불량률 감소']
             },
@@ -465,7 +495,6 @@
                 skills: [ { name: 'Project Mgmt', per: 92, color: 'var(--color-purple)' }, { name: 'Communication', per: 88, color: 'var(--color-teal)' } ],
                 strengths: ['추진력', '조율'], weaknesses: ['기술 이해도'],
                 
-                // 성장곡선 (성숙기, 높은 수준 유지)
                 growthPath: "M10 30 Q 100 20, 190 20",
                 growthPoints: [{x:10,y:30}, {x:100,y:20}, {x:190,y:20}],
                 growthDesc: "PM으로서의 역량이 성숙 단계에 접어들어 안정적입니다.",
@@ -477,7 +506,13 @@
                 ],
                 
                 kpiTotal: 95, kpiDesc: '대형 프로젝트 납기 100% 준수 및 예산 절감',
-                coreValues: [ { name: 'Customer Focus', score: 90 }, { name: 'Sustainability', score: 85 }, { name: 'Agility', score: 88 }, { name: 'Passion', score: 92 }, { name: 'Collaboration', score: 98 } ],
+                coreValues: [
+                    { name: 'Customer Focus', score: 90 },
+                    { name: 'Sustainability', score: 85 },
+                    { name: 'Agility', score: 88 },
+                    { name: 'Passion', score: 92 },
+                    { name: 'Collaboration', score: 98 }
+                ],
                 currRole: 'Project Manager', goalRole: 'Center Leader',
                 compGoals: ['PMP 갱신', '애자일 코칭'], bizGoals: ['DX 성공적 런칭']
             },
@@ -487,7 +522,6 @@
                 skills: [ { name: 'React', per: 75, color: 'var(--color-purple)' }, { name: 'AWS', per: 60, color: 'var(--color-lightblue)' } ],
                 strengths: ['성실함', '프로토타이핑'], weaknesses: ['아키텍처', '코드리뷰'],
                 
-                // 성장곡선 (초기 완만하다가 상승)
                 growthPath: "M10 90 L 80 80 L 190 40",
                 growthPoints: [{x:10,y:90}, {x:80,y:80}, {x:190,y:40}],
                 growthDesc: "초기 적응을 마치고 개발 생산성이 향상되고 있습니다.",
@@ -498,7 +532,13 @@
                 ],
                 
                 kpiTotal: 85, kpiDesc: '레거시 코드 리팩토링 및 신규 기능 개발 완료',
-                coreValues: [ { name: 'Customer Focus', score: 85 }, { name: 'Sustainability', score: 80 }, { name: 'Agility', score: 85 }, { name: 'Passion', score: 90 }, { name: 'Collaboration', score: 88 } ],
+                coreValues: [
+                    { name: 'Customer Focus', score: 85 },
+                    { name: 'Sustainability', score: 80 },
+                    { name: 'Agility', score: 85 },
+                    { name: 'Passion', score: 90 },
+                    { name: 'Collaboration', score: 88 }
+                ],
                 currRole: 'Software Eng.', goalRole: 'Architect',
                 compGoals: ['Kubernetes', 'MSA'], bizGoals: ['안정성 99.9%']
             },
@@ -508,7 +548,6 @@
                 skills: [ { name: 'UI Design', per: 88, color: 'var(--color-magenta)' } ],
                 strengths: ['창의성', '인사이트'], weaknesses: ['데이터 분석'],
                 
-                // 성장곡선 (S자형)
                 growthPath: "M10 90 C 60 90, 90 40, 190 30",
                 growthPoints: [{x:10,y:90}, {x:190,y:30}],
                 growthDesc: "디자인 시스템 구축을 통해 전문성이 크게 확대되었습니다.",
@@ -519,7 +558,13 @@
                 ],
                 
                 kpiTotal: 90, kpiDesc: '디자인 시스템 구축 및 사용자 만족도 상승',
-                coreValues: [ { name: 'Customer Focus', score: 98 }, { name: 'Sustainability', score: 80 }, { name: 'Agility', score: 85 }, { name: 'Passion', score: 90 }, { name: 'Collaboration', score: 92 } ],
+                coreValues: [
+                    { name: 'Customer Focus', score: 98 },
+                    { name: 'Sustainability', score: 80 },
+                    { name: 'Agility', score: 85 },
+                    { name: 'Passion', score: 90 },
+                    { name: 'Collaboration', score: 92 }
+                ],
                 currRole: 'UX Designer', goalRole: 'Product Designer',
                 compGoals: ['Figma 심화'], bizGoals: ['이탈률 감소']
             }
@@ -528,22 +573,18 @@
 
         window.onload = () => {
             renderSidebar();
-            setupSearch(); // 검색 기능 초기화
+            setupSearch(); 
         };
 
-        // 검색 기능 설정
+        // 검색
         function setupSearch() {
             const input = document.getElementById('member-search');
             input.addEventListener('keypress', function (e) {
                 if (e.key === 'Enter') {
                     const val = this.value.trim();
                     const found = members.find(m => m.includes(val));
-                    if (found) {
-                        selectMember(found);
-                        this.value = ''; // 입력창 비우기
-                    } else {
-                        alert('해당 이름의 구성원을 찾을 수 없습니다.');
-                    }
+                    if (found) { selectMember(found); this.value = ''; } 
+                    else { alert('구성원을 찾을 수 없습니다.'); }
                 }
             });
         }
@@ -577,6 +618,7 @@
         }
 
         function selectMember(name) {
+            // 화면 전환
             document.getElementById('empty-state').style.display = 'none';
             document.getElementById('main-content').classList.add('active');
             
@@ -587,7 +629,7 @@
             const d = teamDB[name];
             const full = name + (name.includes('책임')?'':' 선임');
 
-            // --- TAB 1: 기본정보 ---
+            // 1. 기본정보 탭 렌더링
             document.getElementById('p-avatar').innerText = d.avatar;
             document.getElementById('p-name').innerText = full;
             document.getElementById('p-job').innerText = d.job;
@@ -609,23 +651,20 @@
             document.getElementById('p-strengths').innerHTML = d.strengths.map(s => `<div class="swot-item">${s}</div>`).join('');
             document.getElementById('p-weaknesses').innerHTML = d.weaknesses.map(s => `<div class="swot-item">${s}</div>`).join('');
             
-            // 성장곡선 업데이트
+            // 성장곡선
             document.getElementById('growth-path').setAttribute('d', d.growthPath);
             document.getElementById('growth-desc').innerText = d.growthDesc;
             const pointsGroup = document.getElementById('growth-points');
-            pointsGroup.innerHTML = ''; // 초기화
+            pointsGroup.innerHTML = '';
             d.growthPoints.forEach(pt => {
                 const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-                circle.setAttribute("cx", pt.x);
-                circle.setAttribute("cy", pt.y);
-                circle.setAttribute("r", "4");
-                circle.setAttribute("fill", "#fff");
-                circle.setAttribute("stroke", "var(--color-purple)");
-                circle.setAttribute("stroke-width", "2");
+                circle.setAttribute("cx", pt.x); circle.setAttribute("cy", pt.y);
+                circle.setAttribute("r", "4"); circle.setAttribute("fill", "#fff");
+                circle.setAttribute("stroke", "var(--color-purple)"); circle.setAttribute("stroke-width", "2");
                 pointsGroup.appendChild(circle);
             });
 
-            // 이력 업데이트
+            // 이력
             document.getElementById('p-history').innerHTML = d.history.map(h => `
                 <div class="timeline-item">
                     <div class="timeline-dot"></div>
@@ -635,7 +674,8 @@
                 </div>
             `).join('');
 
-            // --- TAB 2: 성과 & 육성 ---
+            // 2. 성과 & 육성 탭 렌더링
+            // 핵심가치 평균 계산
             let cvSum = 0;
             let cvHtml = '';
             d.coreValues.forEach(c => {
@@ -654,6 +694,7 @@
             document.getElementById('cv-list').innerHTML = cvHtml;
             document.getElementById('cv-total-score').innerText = cvAvg;
 
+            // KPI 도넛 차트
             const donutFg = document.getElementById('kpi-donut');
             const offset = 377 - (377 * d.kpiTotal / 100);
             donutFg.style.transition = 'none'; donutFg.style.strokeDashoffset = 377;
@@ -661,11 +702,17 @@
             document.getElementById('kpi-total').innerText = d.kpiTotal + '%';
             document.getElementById('kpi-desc-text').innerText = d.kpiDesc;
 
+            // [종합 평가 로직] 성과(80%) + 핵심가치(20%)
             const finalScore = (d.kpiTotal * 0.8) + (cvAvg * 0.2);
-            document.getElementById('sum-kpi').innerText = d.kpiTotal + '점';
-            document.getElementById('sum-cv').innerText = cvAvg + '점';
+            document.getElementById('sum-kpi').innerText = d.kpiTotal;
+            document.getElementById('calc-kpi').innerText = `(x 0.8 = ${(d.kpiTotal * 0.8).toFixed(1)})`;
+            
+            document.getElementById('sum-cv').innerText = cvAvg;
+            document.getElementById('calc-cv').innerText = `(x 0.2 = ${(cvAvg * 0.2).toFixed(1)})`;
+            
             document.getElementById('final-grade').innerText = calculateGrade(finalScore);
 
+            // 육성 목표
             document.getElementById('dev-current').innerText = d.currRole;
             document.getElementById('dev-goal').innerText = d.goalRole;
             const goalList = arr => `<ul style="list-style:none; padding:0;">${arr.map(g => `<li class="goal-li">${g}</li>`).join('')}</ul>`;
